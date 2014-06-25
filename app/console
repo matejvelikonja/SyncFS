@@ -8,9 +8,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 // import the Symfony Console Application
 use SyncFS\Command\SyncCommand;
+use SyncFS\Command\InitCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application();
 
 $app->add(new SyncCommand());
+$app->add(new InitCommand());
 $app->run();

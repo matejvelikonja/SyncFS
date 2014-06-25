@@ -3,7 +3,6 @@
 namespace SyncFS\Test\Functional;
 
 use SyncFS\Command\SyncCommand;
-use SyncFS\Test\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
