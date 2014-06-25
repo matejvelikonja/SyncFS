@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class InitCommand extends Command
 {
-    const COMMAND_NAME    = 'syncfs:init';
+    const COMMAND_NAME    = 'init';
     const ARG_CONFIG_PATH = 'config-path';
 
     /**
@@ -57,6 +57,12 @@ class InitCommand extends Command
 
         if (! $content = @file_get_contents($exampleFile)) {
             throw new \RuntimeException(sprintf('<error>File `%s` cannot be read!</error>', $exampleFile));
+        }
+
+        if (file_exists($file)) {
+            $output->writeln(sprintf('<error>File `%s` already exists.</error>', realpath($file)));
+
+            return;
         }
 
         if (! is_writable(dirname($file))) {

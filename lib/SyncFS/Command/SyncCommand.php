@@ -22,19 +22,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SyncCommand extends Command
 {
-    const COMMAND_NAME    = 'syncfs';
+    const COMMAND_NAME    = 'sync';
     const ARG_CONFIG_PATH = 'config-path';
 
     /**
      * @var string
      */
-    private $defaultConfigPath = '~/.syncfs.yml';
+    private $defaultConfigPath;
 
     /**
      * Configure command.
      */
     protected function configure()
     {
+        $this->defaultConfigPath = getenv("HOME") . '/.syncfs.yml';
+
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription("Sync")
@@ -51,12 +53,20 @@ class SyncCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
+     * @throws \Exception
+     *
      * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configPath = $input->getArgument('config-path');
         $dryRun     = $input->getOption('dry-run');
+
+        if (! file_exists($configPath)) {
+            throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
+        }
+
+        $configPath = realpath($configPath);
 
         $output->writeln(sprintf('Reading configuration from file %s.', $configPath));
 
