@@ -22,7 +22,8 @@
 
     "require-dev": {
         "phpunit/phpunit": "4.1.*",
-        "symfony/process": ">=2.3"
+        "symfony/process": ">=2.3",
+        "kherge/box": "~2.0"
     },
 
     "autoload": {

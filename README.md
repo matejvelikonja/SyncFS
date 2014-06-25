@@ -14,6 +14,11 @@ Install dependencies
 $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install --dev
 ```
+## Building
+
+```bash
+$ vendor/bin/box build
+```
 
 ### Tests
 

@@ -11,7 +11,7 @@ use SyncFS\Command\SyncCommand;
 use SyncFS\Command\InitCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application();
+$app = new Application('SyncFS', '@package_version@');
 
 $app->add(new SyncCommand());
 $app->add(new InitCommand());

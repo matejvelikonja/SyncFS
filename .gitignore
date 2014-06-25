@@ -8,3 +8,6 @@ vendor
 log/
 phpunit.xml
 tmp
+
+# Builds
+syncfs.phar
