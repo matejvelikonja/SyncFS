@@ -27,8 +27,6 @@ class InitCommand extends Command
      */
     protected function configure()
     {
-        $this->defaultConfigPath = getenv("HOME") . '/.syncfs.yml';
-
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription("Initialize empty config file.")
@@ -64,7 +62,7 @@ class InitCommand extends Command
         }
 
         if (! is_writable(dirname($file))) {
-            throw new \RuntimeException(sprintf('<error>File `%s` cannot be create!</error>', $file));
+            throw new \RuntimeException(sprintf('<error>File `%s` cannot be created!</error>', $file));
         }
 
         $fs = new Filesystem();
