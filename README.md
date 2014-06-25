@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/matejvelikonja/SyncFS.svg?branch=master)](https://travis-ci.org/matejvelikonja/SyncFS)
 [![Code Coverage](https://scrutinizer-ci.com/g/matejvelikonja/SyncFS/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/matejvelikonja/SyncFS/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/matejvelikonja/SyncFS/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/matejvelikonja/SyncFS/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/9049a67f-a78c-4366-8712-5bed46f02156/mini.png)](https://insight.sensiolabs.com/projects/9049a67f-a78c-4366-8712-5bed46f02156)
 
 PHP Library for syncing folders.
 
