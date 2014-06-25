@@ -30,7 +30,7 @@ class SyncCommand extends Command
     {
         $this
             ->setName(self::COMMAND_NAME)
-            ->setDescription("Sync")
+            ->setDescription("Run synchronization.")
             ->addArgument(
                 self::ARG_CONFIG_PATH,
                 InputArgument::OPTIONAL,
