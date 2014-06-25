@@ -85,4 +85,56 @@ class MapBagTest extends TestCase
         $this->assertNull($bag->first());
     }
 
+    /**
+     * Tests if first() returns really first element.
+     */
+    public function testIfFirstReturnsFirstElement()
+    {
+        $bag = new MapBag(array('a', 'b', 'c'));
+
+        $this->assertEquals('a', $bag->first());
+    }
+
+    /**
+     * Tests if offsetExists() returns true when elements exists.
+     */
+    public function testOffsetExistsReturnsTrue()
+    {
+        $bag = new MapBag(array('a', 'b', 'c'));
+
+        $this->assertTrue($bag->offsetExists(2));
+    }
+
+    /**
+     * Tests if offsetExists() returns false when elements does not exist.
+     */
+    public function testOffsetExistsReturnsFalse()
+    {
+        $bag = new MapBag(array('a', 'b', 'c'));
+
+        $this->assertFalse($bag->offsetExists(25));
+    }
+
+    /**
+     * Tests offsetSet().
+     */
+    public function testOffsetSet()
+    {
+        $map = new FileSystemMap();
+        $bag = new MapBag();
+        $bag->offsetSet(88, $map);
+
+        $this->assertEquals($map, $bag->offsetGet(88));
+    }
+
+    /**
+     * Tests offsetUnset().
+     */
+    public function testOffsetUnset()
+    {
+        $bag = new MapBag(array(1, 2, 3));
+        $bag->offsetUnset(1);
+
+        $this->assertCount(2, $bag);
+    }
 }
