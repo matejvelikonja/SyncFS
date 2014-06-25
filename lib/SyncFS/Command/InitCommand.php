@@ -18,11 +18,6 @@ class InitCommand extends Command
     const COMMAND_NAME    = 'init';
 
     /**
-     * @var string
-     */
-    private $defaultConfigPath;
-
-    /**
      * Configure command.
      */
     protected function configure()
@@ -33,8 +28,8 @@ class InitCommand extends Command
             ->addArgument(
                 self::ARG_CONFIG_PATH,
                 InputArgument::OPTIONAL,
-                'Path to config file. Default ' . $this->defaultConfigPath,
-                $this->defaultConfigPath
+                'Path to config file. Default ' . $this->getDefaultConfiguration(),
+                $this->getDefaultConfiguration()
             );
     }
 

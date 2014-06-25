@@ -53,7 +53,7 @@ class MapBag implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * @return array|MapInterface[]
+     * @return array|\Traversable|MapInterface[]
      */
     public function all()
     {
