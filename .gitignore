@@ -1,0 +1,10 @@
+#Composer
+composer.lock
+composer.phar
+autoload.php
+vendor
+
+# Tests
+log/
+phpunit.xml
+tmp

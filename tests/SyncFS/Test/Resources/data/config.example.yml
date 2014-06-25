@@ -1,0 +1,8 @@
+sync-fs:
+  maps:
+    map_1:
+      src: tmp/functional/src/
+      dst: tmp/functional/dst/
+    map_2:
+      src: tmp/functional/src2/
+      dst: tmp/functional/dst2/
