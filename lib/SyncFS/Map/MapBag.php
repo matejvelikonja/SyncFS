@@ -11,7 +11,7 @@ namespace SyncFS\Map;
 class MapBag implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
-     * @var array|MapInterface
+     * @var array|MapInterface[]|\Traversable
      */
     private $maps;
 
