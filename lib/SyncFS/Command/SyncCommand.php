@@ -8,7 +8,6 @@ use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
 use SyncFS\Map\FileSystemMapFactory;
 use SyncFS\Syncer\FolderSyncer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,29 +21,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SyncCommand extends Command
 {
-    const COMMAND_NAME    = 'sync';
-    const ARG_CONFIG_PATH = 'config-path';
-
-    /**
-     * @var string
-     */
-    private $defaultConfigPath;
+    const COMMAND_NAME = 'sync';
 
     /**
      * Configure command.
      */
     protected function configure()
     {
-        $this->defaultConfigPath = getenv("HOME") . '/.syncfs.yml';
-
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription("Sync")
             ->addArgument(
                 self::ARG_CONFIG_PATH,
                 InputArgument::OPTIONAL,
-                'Path to config file. Default ' . $this->defaultConfigPath,
-                $this->defaultConfigPath
+                'Path to config file.',
+                $this->getDefaultConfiguration()
             )
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
     }

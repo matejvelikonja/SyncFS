@@ -17,6 +17,8 @@
         "symfony/config": ">=2.3",
         "symfony/filesystem": ">=2.3",
 
+        "symfony/finder": ">=2.3",
+
         "albertofem/rsync-lib": "dev-master"
     },
 

@@ -6,13 +6,27 @@ set_time_limit(0);
 // include the composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
+$libDir = realpath(__DIR__ . '/../lib/SyncFS');
+
 // import the Symfony Console Application
-use SyncFS\Command\SyncCommand;
-use SyncFS\Command\InitCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Finder\Finder;
+
+$finder = new Finder();
+$finder
+    ->files()
+    ->in($libDir . '/Command')
+    ->name('/(\w+)Command.php/');
+
+$commands = array();
+/** @var SplFileInfo $file */
+foreach ($finder as $file) {
+    $className  = str_replace('.php', '', $file->getFilename());
+    $className  = '\\SyncFS\\Command\\' . $className;
+    $commands[] = new $className();
+}
 
 $app = new Application('SyncFS', '@package_version@');
 
-$app->add(new SyncCommand());
-$app->add(new InitCommand());
+$app->addCommands($commands);
 $app->run();
