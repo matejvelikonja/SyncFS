@@ -19,7 +19,7 @@ class FolderSyncer
     private $client;
 
     /**
-     * @param mixed $client
+     * @param ClientInterface $client
      */
     public function __construct(ClientInterface $client)
     {

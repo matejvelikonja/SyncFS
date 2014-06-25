@@ -37,7 +37,7 @@ class MapBag implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * @return \ArrayIterator|\Traversable|MapInterface[]
+     * @return \ArrayIterator|MapInterface[]
      */
     public function getIterator()
     {
