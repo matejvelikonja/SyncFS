@@ -124,7 +124,7 @@ class SyncCommandTest extends TestCase
      */
     public function getDirSize($dir)
     {
-        $output = $this->runCommand(sprintf('du -shb %s', $dir));
+        $output = $this->runCommand(sprintf('du -s %s', $dir));
         $size   = (int) $output;
 
         return $size;
