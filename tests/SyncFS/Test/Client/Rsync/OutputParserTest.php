@@ -37,5 +37,34 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
             array('something that definitely can not be read by the parser...', null),
         );
     }
+
+    /**
+     * @param string $buffer
+     * @param string $expectedResult
+     *
+     * @dataProvider getSimpleFileProgressData
+     */
+    public function testSimpleFileParsing($buffer, $expectedResult)
+    {
+        $parser = new OutputParser();
+        $result = $parser->getFile($buffer);
+
+        $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
+    }
+
+    /**
+     * @return array
+     */
+    public function getSimpleFileProgressData()
+    {
+        return array(
+            array('Test/Resources/data/', 'Test/Resources/data/'),
+            array('Test/Resources/data/config.example.yml', 'Test/Resources/data/config.example.yml'),
+            array('165 100%  161.13kB/s    0:00:00 (xfer#10, to-check=3/20)', null),
+            array('building file list ...', null),
+            array('149 files to consider', null),
+            array('created directory something.bckp', null)
+        );
+    }
 }
  
