@@ -24,12 +24,25 @@ class OutputParser
     private $lines;
 
     /**
+     * @var float | null
+     */
+    private $overallProgress;
+
+    /**
+     * @var array
+     */
+    private $files;
+
+    /**
      * Constructor.
      *
      * @param array $lines
      */
     public function __construct(array $lines = array())
     {
+        $this->overallProgress = null;
+        $this->files           = array();
+
         $this->setLines($lines);
     }
 
@@ -59,13 +72,49 @@ class OutputParser
 
         $this->lines[] = $line;
 
+        if ($this->hasFinished()) {
+            $this->overallProgress = 1;
+
+            return $this;
+        }
+
+        $progress = $this->determineOverallProgress();
+
+        if ($progress) {
+            $this->overallProgress = $progress;
+        } else {
+            $file = $this->determineFile();
+
+            if ($file) {
+                $this->files[] = $file;
+            }
+        }
+
         return $this;
+    }
+
+    /**
+     * Returns overall progress. If returns null, syncing has not started yet.
+     *
+     * @return float | null
+     */
+    public function getOverallProgress()
+    {
+        return $this->overallProgress;
     }
 
     /**
      * @return string
      */
-    public function getLastLine()
+    public function getLastFile()
+    {
+        return end($this->files);
+    }
+
+    /**
+     * @return string
+     */
+    private function getLastLine()
     {
         return end($this->lines);
     }
@@ -76,7 +125,7 @@ class OutputParser
      *
      * @return float | null
      */
-    public function getProgress()
+    private function determineOverallProgress()
     {
         preg_match($this->toCheckPattern, $this->getLastLine(), $matches);
 
@@ -94,17 +143,27 @@ class OutputParser
     }
 
     /**
-     * Tries to determine if $buffer contains file that is syncing. If yes, it returns filename.
+     * Tries to determine if rsync has finished.
+     *
+     * @return bool
+     */
+    private function hasFinished()
+    {
+        if (preg_match('/sent (.+) bytes received/', $this->getLastLine())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Tries to determine file that is syncing.
      * This is a very basic implementation. It does not know about files in current directory (without any /).
      *
      * @return string | null
      */
-    public function getFile()
+    private function determineFile()
     {
-        if (null !== $this->getProgress($this->getLastLine())) {
-            return null;
-        }
-
         if (strpos($this->getLastLine(), '/')) {
             return $this->getLastLine();
         }
