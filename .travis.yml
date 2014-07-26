@@ -23,11 +23,12 @@ before_script:
     - >
         composer require --dev \
           symfony/console:${SYMFONY_VERSION} \
+          symfony/process:${SYMFONY_VERSION} \
           symfony/yaml:${SYMFONY_VERSION} \
           symfony/config:${SYMFONY_VERSION} \
-          \
           symfony/filesystem:${SYMFONY_VERSION} \
-          symfony/process:${SYMFONY_VERSION}
+          symfony/finder:${SYMFONY_VERSION}
+
     - composer install --dev
     - pear install --alldeps PHP_CodeSniffer
     - phpenv rehash
