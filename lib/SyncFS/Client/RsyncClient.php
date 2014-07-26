@@ -3,6 +3,7 @@
 namespace SyncFS\Client;
 
 use Symfony\Component\Process\Process;
+use SyncFS\Client\Rsync\OutputParser;
 
 /**
  * Class RsyncClient
@@ -46,14 +47,9 @@ class RsyncClient implements ClientInterface
     }
 
     /**
-     * @param string $src
-     * @param string $dst
-     *
-     * @throws ClientException
-     *
-     * @return int|null
+     * @inheritdoc
      */
-    public function sync($src, $dst)
+    public function sync($src, $dst, $callback = null)
     {
         if (! strlen($dst)) {
             throw new ClientException('Destination parameter missing.');
@@ -66,10 +62,17 @@ class RsyncClient implements ClientInterface
         $options = $this->getOptionsString();
         $command = implode(' ', array($this->executable, $options, $src, $dst));
         $process = new Process($command);
+        $parser  = new OutputParser();
         $process->setTimeout($this->options['timeout']);
 
-        $process->run(function ($type, $buffer) {
-            echo $buffer . PHP_EOL;
+        $process->run(function ($type, $buffer) use ($callback, $parser) {
+            if (Process::ERR === $type) {
+                return;
+            }
+
+            $parser->addLine($buffer);
+
+            call_user_func($callback, $parser->getOverallProgress(), $parser->getLastFile());
         });
 
         if (! $process->isSuccessful()) {
@@ -87,7 +90,7 @@ class RsyncClient implements ClientInterface
         $options   = array_filter($this->options['rsync']); // remove all options with false value
         $arguments = '';
 
-        foreach($options as $name => $value) {
+        foreach ($options as $name => $value) {
             $prefix = ' -';
             if (strlen($name) > 1) {
                 $prefix = ' --';

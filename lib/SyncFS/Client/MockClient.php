@@ -21,10 +21,9 @@ class MockClient implements ClientInterface
     private $target;
 
     /**
-     * @param string $origin
-     * @param string $target
+     * @inheritdoc
      */
-    public function sync($origin, $target)
+    public function sync($origin, $target, $callback = null)
     {
         $this->target = $origin;
     }

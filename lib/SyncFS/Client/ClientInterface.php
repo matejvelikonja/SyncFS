@@ -15,10 +15,11 @@ interface ClientInterface
      * If SSH was configured, you must use absolute path
      * in the target directory
      *
-     * @param string $origin
-     * @param string $target
+     * @param string   $origin
+     * @param string   $target
+     * @param Callable $callback
      *
-     * @throws \InvalidArgumentException If the command failed
+     * @throws ClientException
      */
-    public function sync($origin, $target);
+    public function sync($origin, $target, $callback = null);
 }
