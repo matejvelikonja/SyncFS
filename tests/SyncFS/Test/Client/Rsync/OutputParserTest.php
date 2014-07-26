@@ -19,8 +19,8 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleProgressParsing($buffer, $expectedResult)
     {
-        $parser = new OutputParser();
-        $result = $parser->getProgress($buffer);
+        $parser = new OutputParser(array($buffer));
+        $result = $parser->getProgress();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
     }
@@ -46,8 +46,8 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleFileParsing($buffer, $expectedResult)
     {
-        $parser = new OutputParser();
-        $result = $parser->getFile($buffer);
+        $parser = new OutputParser(array($buffer));
+        $result = $parser->getFile();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
     }

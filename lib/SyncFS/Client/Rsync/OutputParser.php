@@ -19,16 +19,49 @@ class OutputParser
     private $toCheckPattern = '/to-check=(\d+)\/(\d+)/';
 
     /**
+     * @var array
+     */
+    private $buffer;
+
+    /**
+     * Constructor.
+     *
+     * @param array $buffer
+     */
+    public function __construct(array $buffer = array())
+    {
+        $this->buffer = $buffer;
+    }
+
+    /**
+     * @param string $buffer
+     *
+     * @return $this
+     */
+    public function addBuffer($buffer)
+    {
+        $this->buffer[] = $buffer;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastBuffer()
+    {
+        return end($this->buffer);
+    }
+
+    /**
      * Returns progress read from rsync output.
      * If parser cannot read progress it returns null.
      *
-     * @param string $buffer
-     *
      * @return float | null
      */
-    public function getProgress($buffer)
+    public function getProgress()
     {
-        preg_match($this->toCheckPattern, $buffer, $matches);
+        preg_match($this->toCheckPattern, $this->getLastBuffer(), $matches);
 
         if (count($matches) < 3) {
             return null;
@@ -47,18 +80,16 @@ class OutputParser
      * Tries to determine if $buffer contains file that is syncing. If yes, it returns filename.
      * This is a very basic implementation. It does not know about files in current directory (without any /).
      *
-     * @param string $buffer
-     *
      * @return string | null
      */
-    public function getFile($buffer)
+    public function getFile()
     {
-        if (null !== $this->getProgress($buffer)) {
+        if (null !== $this->getProgress($this->getLastBuffer())) {
             return null;
         }
 
-        if (strpos($buffer, '/')) {
-            return $buffer;
+        if (strpos($this->getLastBuffer(), '/')) {
+            return trim(preg_replace('/\s+/', ' ', $this->getLastBuffer()));
         }
 
         return null;
