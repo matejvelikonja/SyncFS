@@ -21,26 +21,43 @@ class OutputParser
     /**
      * @var array
      */
-    private $buffer;
+    private $lines;
 
     /**
      * Constructor.
      *
-     * @param array $buffer
+     * @param array $lines
      */
-    public function __construct(array $buffer = array())
+    public function __construct(array $lines = array())
     {
-        $this->buffer = $buffer;
+        $this->setLines($lines);
     }
 
     /**
-     * @param string $buffer
+     * @param array $lines
      *
      * @return $this
      */
-    public function addBuffer($buffer)
+    public function setLines(array $lines)
     {
-        $this->buffer[] = $buffer;
+        foreach ($lines as $line) {
+            $this->addLine($line);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $line
+     *
+     * @return $this
+     */
+    public function addLine($line)
+    {
+        // removes new lines
+        $line = trim(preg_replace('/\s+/', ' ', $line));
+
+        $this->lines[] = $line;
 
         return $this;
     }
@@ -48,9 +65,9 @@ class OutputParser
     /**
      * @return string
      */
-    public function getLastBuffer()
+    public function getLastLine()
     {
-        return end($this->buffer);
+        return end($this->lines);
     }
 
     /**
@@ -61,7 +78,7 @@ class OutputParser
      */
     public function getProgress()
     {
-        preg_match($this->toCheckPattern, $this->getLastBuffer(), $matches);
+        preg_match($this->toCheckPattern, $this->getLastLine(), $matches);
 
         if (count($matches) < 3) {
             return null;
@@ -84,12 +101,12 @@ class OutputParser
      */
     public function getFile()
     {
-        if (null !== $this->getProgress($this->getLastBuffer())) {
+        if (null !== $this->getProgress($this->getLastLine())) {
             return null;
         }
 
-        if (strpos($this->getLastBuffer(), '/')) {
-            return trim(preg_replace('/\s+/', ' ', $this->getLastBuffer()));
+        if (strpos($this->getLastLine(), '/')) {
+            return $this->getLastLine();
         }
 
         return null;

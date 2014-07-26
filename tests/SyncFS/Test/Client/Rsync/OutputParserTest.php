@@ -1,6 +1,7 @@
 <?php
 
 namespace SyncFS\Test\Client\Rsync;
+
 use SyncFS\Client\Rsync\OutputParser;
 
 /**
@@ -12,14 +13,14 @@ use SyncFS\Client\Rsync\OutputParser;
 class OutputParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param string $buffer
+     * @param string $line
      * @param float  $expectedResult
      *
      * @dataProvider getSimpleProgressBufferData
      */
-    public function testSimpleProgressParsing($buffer, $expectedResult)
+    public function testSimpleProgressParsing($line, $expectedResult)
     {
-        $parser = new OutputParser(array($buffer));
+        $parser = new OutputParser(array($line));
         $result = $parser->getProgress();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
@@ -39,14 +40,14 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $buffer
+     * @param string $line
      * @param string $expectedResult
      *
      * @dataProvider getSimpleFileProgressData
      */
-    public function testSimpleFileParsing($buffer, $expectedResult)
+    public function testSimpleFileParsing($line, $expectedResult)
     {
-        $parser = new OutputParser(array($buffer));
+        $parser = new OutputParser(array($line));
         $result = $parser->getFile();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
