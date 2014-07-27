@@ -4,6 +4,7 @@ namespace SyncFS\Client;
 
 use Symfony\Component\Process\Process;
 use SyncFS\Client\Rsync\OutputParser;
+use SyncFS\Event;
 
 /**
  * Class RsyncClient
@@ -84,10 +85,15 @@ class RsyncClient implements ClientInterface
                 return;
             }
 
-            $parser->addLine($buffer);
-
             if ($callback) {
-                call_user_func($callback, $parser->getOverallProgress(), $parser->getLastFile());
+                $parser->addLine($buffer);
+
+                $event = new Event(
+                    $parser->getLastFile(),
+                    $parser->getOverallProgress()
+                );
+
+                call_user_func($callback, $event);
             }
 
         });

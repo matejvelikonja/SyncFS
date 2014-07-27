@@ -6,6 +6,7 @@ use SyncFS\Client\MockClient;
 use SyncFS\Client\RsyncClient;
 use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
+use SyncFS\EventInterface;
 use SyncFS\Map\FileSystemMapFactory;
 use SyncFS\Syncer\FolderSyncer;
 use Symfony\Component\Console\Input\InputArgument;
@@ -77,7 +78,11 @@ class SyncCommand extends Command
         $output->writeln('<info>Syncing folders...</info>');
 
         $folderSyncer = new FolderSyncer($client);
-        $folderSyncer->sync($folders);
+        $folderSyncer->sync($folders, function (EventInterface $event) use ($output) {
+            $output->writeln($event->getFile());
+            $output->writeln($event->getOverallProgress());
+            $output->writeln($event->getMap());
+        });
 
         $output->writeln('<info>Syncing folders succeeded!</info>');
     }

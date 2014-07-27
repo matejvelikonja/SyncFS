@@ -28,6 +28,18 @@ class Event implements EventInterface
     private $map;
 
     /**
+     * @param string       $file
+     * @param float        $overallProgress
+     * @param MapInterface $map
+     */
+    public function __construct($file = null, $overallProgress = null, MapInterface $map = null)
+    {
+        $this->file            = $file;
+        $this->map             = $map;
+        $this->overallProgress = $overallProgress;
+    }
+
+    /**
      * @param string $file
      *
      * @return $this

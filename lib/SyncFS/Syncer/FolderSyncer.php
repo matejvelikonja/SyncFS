@@ -27,12 +27,13 @@ class FolderSyncer
     }
 
     /**
-     * @param MapBag $folders
+     * @param MapBag   $folders
+     * @param Callable $callback
      */
-    public function sync(MapBag $folders)
+    public function sync(MapBag $folders, $callback = null)
     {
         foreach ($folders->all() as $folder) {
-            $this->client->sync($folder->getSource(), $folder->getDestination());
+            $this->client->sync($folder->getSource(), $folder->getDestination(), $callback);
         }
     }
 }
