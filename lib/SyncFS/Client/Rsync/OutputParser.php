@@ -72,6 +72,18 @@ class OutputParser
 
         $this->lines[] = $line;
 
+        $this->recalculate();
+
+        return $this;
+    }
+
+    /**
+     * Recalculate all properties.
+     *
+     * @return $this
+     */
+    private function recalculate()
+    {
         if ($this->hasFinished()) {
             $this->overallProgress = 1;
 
