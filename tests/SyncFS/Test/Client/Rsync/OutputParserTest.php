@@ -2,6 +2,7 @@
 
 namespace SyncFS\Test\Client\Rsync;
 
+use SyncFS\Client\Output;
 use SyncFS\Client\Rsync\OutputParser;
 
 /**
@@ -20,7 +21,8 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleProgressParsing(array $lines, $expectedResult)
     {
-        $parser = new OutputParser($lines);
+        $output = new Output($lines);
+        $parser = new OutputParser($output);
         $result = $parser->getOverallProgress();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');
@@ -83,7 +85,8 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
             'total size is 20.82K  speedup is 2.56'
         );
 
-        $parser = new OutputParser($lines);
+        $output = new Output($lines);
+        $parser = new OutputParser($output);
 
         $this->assertEquals(1, $parser->getOverallProgress());
     }
@@ -96,7 +99,8 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleFileParsing(array $lines, $expectedResult)
     {
-        $parser = new OutputParser($lines);
+        $output = new Output($lines);
+        $parser = new OutputParser($output);
         $result = $parser->getLastFile();
 
         $this->assertEquals($expectedResult, $result, 'Parsing of given buffer failed.');

@@ -86,11 +86,14 @@ class RsyncClient implements ClientInterface
             }
 
             if ($callback) {
-                $parser->addLine($buffer);
+                $parser->getOutput()->add($buffer);
+                $parser->recalculate();
 
                 $event = new Event(
                     $parser->getLastFile(),
-                    $parser->getOverallProgress()
+                    $parser->getOverallProgress(),
+                    null,
+                    $parser->getOutput()
                 );
 
                 call_user_func($callback, $event);

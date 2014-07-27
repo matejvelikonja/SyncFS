@@ -1,6 +1,7 @@
 <?php
 
 namespace SyncFS\Client\Rsync;
+use SyncFS\Client\Output;
 
 /**
  * Class OutputParser
@@ -19,11 +20,6 @@ class OutputParser
     private $toCheckPattern = '/to-check=(\d+)\/(\d+)/';
 
     /**
-     * @var array
-     */
-    private $lines;
-
-    /**
      * @var float | null
      */
     private $overallProgress;
@@ -34,47 +30,26 @@ class OutputParser
     private $files;
 
     /**
+     * @var \SyncFS\Client\Output
+     */
+    private $output;
+
+    /**
      * Constructor.
      *
-     * @param array $lines
+     * @param Output $output
      */
-    public function __construct(array $lines = array())
+    public function __construct(Output $output = null)
     {
-        $this->overallProgress = null;
-        $this->files           = array();
-
-        $this->setLines($lines);
-    }
-
-    /**
-     * @param array $lines
-     *
-     * @return $this
-     */
-    public function setLines(array $lines)
-    {
-        foreach ($lines as $line) {
-            $this->addLine($line);
+        if (!$output) {
+            $output = new Output();
         }
 
-        return $this;
-    }
-
-    /**
-     * @param string $line
-     *
-     * @return $this
-     */
-    public function addLine($line)
-    {
-        // removes new lines
-        $line = trim(preg_replace('/\s+/', ' ', $line));
-
-        $this->lines[] = $line;
+        $this->overallProgress = null;
+        $this->files           = array();
+        $this->output          = $output;
 
         $this->recalculate();
-
-        return $this;
     }
 
     /**
@@ -82,8 +57,12 @@ class OutputParser
      *
      * @return $this
      */
-    private function recalculate()
+    public function recalculate()
     {
+        if ($this->output->isEmpty()) {
+            return $this;
+        }
+
         if ($this->hasFinished()) {
             $this->overallProgress = 1;
 
@@ -124,14 +103,6 @@ class OutputParser
     }
 
     /**
-     * @return string
-     */
-    private function getLastLine()
-    {
-        return end($this->lines);
-    }
-
-    /**
      * Returns progress read from rsync output.
      * If parser cannot read progress it returns null.
      *
@@ -139,7 +110,7 @@ class OutputParser
      */
     private function determineOverallProgress()
     {
-        preg_match($this->toCheckPattern, $this->getLastLine(), $matches);
+        preg_match($this->toCheckPattern, $this->output->last(), $matches);
 
         if (count($matches) < 3) {
             return null;
@@ -161,7 +132,7 @@ class OutputParser
      */
     private function hasFinished()
     {
-        if (preg_match('/sent (.+) bytes received/', $this->getLastLine())) {
+        if (preg_match('/sent (.+) bytes received/', $this->output->last())) {
             return true;
         }
 
@@ -176,10 +147,31 @@ class OutputParser
      */
     private function determineFile()
     {
-        if (strpos($this->getLastLine(), '/')) {
-            return $this->getLastLine();
+        if (strpos($this->output->last(), '/')) {
+            return $this->output->last();
         }
 
         return null;
     }
+
+    /**
+     * @param \SyncFS\Client\Output $output
+     *
+     * @return $this
+     */
+    public function setOutput(Output $output)
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
+     * @return \SyncFS\Client\Output
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
 }

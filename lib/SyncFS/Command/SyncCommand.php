@@ -38,7 +38,8 @@ class SyncCommand extends Command
                 'Path to config file.',
                 $this->getDefaultConfiguration()
             )
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.')
+            ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Enable debug mode.');
     }
 
     /**
@@ -53,6 +54,7 @@ class SyncCommand extends Command
     {
         $configPath = $input->getArgument('config-path');
         $dryRun     = $input->getOption('dry-run');
+        $debug      = $input->getOption('debug');
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -78,10 +80,13 @@ class SyncCommand extends Command
         $output->writeln('<info>Syncing folders...</info>');
 
         $folderSyncer = new FolderSyncer($client);
-        $folderSyncer->sync($folders, function (EventInterface $event) use ($output) {
-            $output->writeln($event->getFile());
-            $output->writeln($event->getOverallProgress());
-            $output->writeln($event->getMap());
+        $folderSyncer->sync($folders, function (EventInterface $event) use ($output, $debug) {
+            if ($debug) {
+                $output->writeln($event->getOutput()->last());
+            }
+//            $output->writeln($event->getFile());
+//            $output->writeln($event->getOverallProgress());
+//            $output->writeln($event->getMap());
         });
 
         $output->writeln('<info>Syncing folders succeeded!</info>');

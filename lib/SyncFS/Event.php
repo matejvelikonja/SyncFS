@@ -2,6 +2,7 @@
 
 namespace SyncFS;
 
+use SyncFS\Client\Output;
 use SyncFS\Map\MapInterface;
 
 /**
@@ -28,15 +29,22 @@ class Event implements EventInterface
     private $map;
 
     /**
-     * @param string       $file
-     * @param float        $overallProgress
-     * @param MapInterface $map
+     * @var Output
      */
-    public function __construct($file = null, $overallProgress = null, MapInterface $map = null)
+    private $output;
+
+    /**
+     * @param string        $file
+     * @param float         $overallProgress
+     * @param MapInterface  $map
+     * @param Client\Output $output
+     */
+    public function __construct($file = null, $overallProgress = null, MapInterface $map = null, Output $output = null)
     {
         $this->file            = $file;
         $this->map             = $map;
         $this->overallProgress = $overallProgress;
+        $this->output          = $output;
     }
 
     /**
@@ -98,5 +106,26 @@ class Event implements EventInterface
     {
         return $this->overallProgress;
     }
+
+    /**
+     * @param \SyncFS\Client\Output $output
+     *
+     * @return $this
+     */
+    public function setOutput(Output $output)
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
+     * @return \SyncFS\Client\Output
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
 
 }

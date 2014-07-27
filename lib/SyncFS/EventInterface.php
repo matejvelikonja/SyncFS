@@ -2,6 +2,7 @@
 
 namespace SyncFS;
 
+use SyncFS\Client\Output;
 use SyncFS\Map\MapInterface;
 
 /**
@@ -47,4 +48,16 @@ interface EventInterface
      * @return \SyncFS\Map\MapInterface
      */
     public function getMap();
+
+    /**
+     * @return Output
+     */
+    public function getOutput();
+
+    /**
+     * @param Output $output
+     *
+     * @return $this
+     */
+    public function setOutput(Output $output);
 }
