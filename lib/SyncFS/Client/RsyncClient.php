@@ -69,6 +69,10 @@ class RsyncClient implements ClientInterface
             throw new ClientException('Source parameter missing.');
         }
 
+        if ($callback !== null && !is_callable($callback)) {
+            throw new ClientException(sprintf('%s is not callable.', $callback));
+        }
+
         $options = $this->getOptionsString();
         $command = implode(' ', array($this->executable, $options, $src, $dst));
         $process = new Process($command);
