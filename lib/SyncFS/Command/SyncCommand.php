@@ -38,8 +38,7 @@ class SyncCommand extends Command
                 'Path to config file.',
                 $this->getDefaultConfiguration()
             )
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.')
-            ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Enable debug mode.');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
     }
 
     /**
@@ -54,7 +53,6 @@ class SyncCommand extends Command
     {
         $configPath = $input->getArgument('config-path');
         $dryRun     = $input->getOption('dry-run');
-        $debug      = $input->getOption('debug');
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -77,18 +75,18 @@ class SyncCommand extends Command
             $client = new RsyncClient();
         }
 
-        $output->writeln('<info>Syncing folders...</info>');
+        $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 
         $folderSyncer = new FolderSyncer($client);
-        $folderSyncer->sync($folders, function (EventInterface $event) use ($output, $debug) {
-            if ($debug) {
-                $output->writeln($event->getOutput()->last());
+        $folderSyncer->sync($folders, function (EventInterface $event) use ($output) {
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
+                $output->writeln(sprintf('<comment>%s</comment>', $event->getOutput()->last()));
             }
 //            $output->writeln($event->getFile());
 //            $output->writeln($event->getOverallProgress());
 //            $output->writeln($event->getMap());
         });
 
-        $output->writeln('<info>Syncing folders succeeded!</info>');
+        $output->writeln(PHP_EOL . '<info>Syncing folders succeeded!</info>');
     }
 }
