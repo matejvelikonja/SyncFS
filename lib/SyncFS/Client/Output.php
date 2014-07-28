@@ -20,7 +20,7 @@ class Output implements \Countable
      */
     public function __construct(array $lines = array())
     {
-        $this->lines = $lines;
+        $this->setLines($lines);
     }
 
     /**
