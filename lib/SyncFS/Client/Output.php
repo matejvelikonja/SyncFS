@@ -97,4 +97,12 @@ class Output implements \Countable
     {
         return ! $this->lines;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return implode(PHP_EOL, $this->lines);
+    }
 }
