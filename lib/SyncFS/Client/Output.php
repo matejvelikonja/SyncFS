@@ -2,107 +2,42 @@
 
 namespace SyncFS\Client;
 
+use SyncFS\Bag;
+
 /**
  * Class Output
  *
  * @package SyncFS\Client
  * @author  Matej Velikonja <matej@velikonja.si>
  */
-class Output implements \Countable
+class Output extends Bag
 {
     /**
-     * @var array
-     */
-    private $lines;
-
-    /**
-     * @param array $lines
-     */
-    public function __construct(array $lines = array())
-    {
-        $this->setLines($lines);
-    }
-
-    /**
-     * @param string $line
+     * @param string $element
      *
      * @return $this
      */
-    public function add($line)
+    public function add($element)
     {
         // removes new lines
-        $line = trim(preg_replace('/\s+/', ' ', $line));
+        $element = trim(preg_replace('/\s+/', ' ', $element));
 
-        $this->lines[] = $line;
-
-        return $this;
+        return parent::add($element);
     }
 
     /**
-     * @param array $lines
+     * @param array $elements
      *
      * @return $this
      */
-    public function setLines(array $lines)
+    public function setData(array $elements)
     {
-        foreach ($lines as $line) {
-            $this->add($line);
+        $this->clear();
+
+        foreach ($elements as $element) {
+            $this->add($element);
         }
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getLines()
-    {
-        return $this->lines;
-    }
-
-    /**
-     * Returns last lines.
-     *
-     * @return string
-     */
-    public function last()
-    {
-        return end($this->lines);
-    }
-
-    /**
-     * Returns second last line.
-     *
-     * @return string | false
-     */
-    public function secondLast()
-    {
-        end($this->lines);
-
-        return prev($this->lines);
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->lines);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEmpty()
-    {
-        return ! $this->lines;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return implode(PHP_EOL, $this->lines);
     }
 }
