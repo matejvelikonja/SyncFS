@@ -71,6 +71,18 @@ class Output implements \Countable
     }
 
     /**
+     * Returns second last line.
+     *
+     * @return string | false
+     */
+    public function secondLast()
+    {
+        end($this->lines);
+
+        return prev($this->lines);
+    }
+
+    /**
      * @return int
      */
     public function count()
