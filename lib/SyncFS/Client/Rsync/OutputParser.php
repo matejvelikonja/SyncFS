@@ -136,6 +136,10 @@ class OutputParser
             return true;
         }
 
+        if (preg_match('/total size is (.+) speedup is/', $this->output->last())) {
+            return true;
+        }
+
         return false;
     }
 
