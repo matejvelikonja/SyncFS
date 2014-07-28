@@ -159,6 +159,20 @@ class OutputParser
     }
 
     /**
+     * @return int
+     */
+    public function getFilesCount()
+    {
+        preg_match($this->toCheckPattern, $this->output->__toString(), $matches);
+
+        if (count($matches) < 3) {
+            return null;
+        }
+
+        return $matches[2];
+    }
+
+    /**
      * @param \SyncFS\Client\Output $output
      *
      * @return $this

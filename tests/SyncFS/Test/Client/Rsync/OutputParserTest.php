@@ -66,7 +66,33 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfOverallProgressReturns1OnFinish()
     {
-        $lines = array(
+        $lines = $this->getSimpleRsyncOutput();
+
+        $output = new Output($lines);
+        $parser = new OutputParser($output);
+
+        $this->assertEquals(1, $parser->getOverallProgress());
+    }
+
+    /**
+     * Tests if 23 is returned as number of all files to sync.
+     */
+    public function testFilesCountMethod()
+    {
+        $lines = $this->getSimpleRsyncOutput();
+
+        $output = new Output($lines);
+        $parser = new OutputParser($output);
+
+        $this->assertEquals(23, $parser->getFilesCount());
+    }
+
+    /**
+     * @return array
+     */
+    private function getSimpleRsyncOutput()
+    {
+        return array(
             'building file list ...',
             '23 files to consider',
             'Test/',
@@ -84,11 +110,6 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
             'sent 7.78K bytes  received 360 bytes  16.28K bytes/sec', // rsync finishes syncing at this moment
             'total size is 20.82K  speedup is 2.56'
         );
-
-        $output = new Output($lines);
-        $parser = new OutputParser($output);
-
-        $this->assertEquals(1, $parser->getOverallProgress());
     }
 
     /**
