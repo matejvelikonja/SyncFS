@@ -52,10 +52,12 @@ class InitCommandTest extends TestCase
     {
         $configFilePath = 'test.yml';
 
-        $this->tester->execute(array(
-           'command'                     => $this->command->getName(),
-            InitCommand::ARG_CONFIG_PATH => $configFilePath,
-        ));
+        $this->tester->execute(
+            array(
+               'command'                     => $this->command->getName(),
+                InitCommand::ARG_CONFIG_PATH => $configFilePath,
+            )
+        );
 
         $this->assertTrue(file_exists($configFilePath), 'Config file was not created.');
 
@@ -69,9 +71,11 @@ class InitCommandTest extends TestCase
     {
         $configFilePath = '/this/should/be/non-writable.yml';
 
-        $this->tester->execute(array(
-            'command'                    => $this->command->getName(),
-            InitCommand::ARG_CONFIG_PATH => $configFilePath,
-        ));
+        $this->tester->execute(
+            array(
+                'command'                    => $this->command->getName(),
+                InitCommand::ARG_CONFIG_PATH => $configFilePath,
+            )
+        );
     }
 }

@@ -80,26 +80,27 @@ class RsyncClient implements ClientInterface
         $parser  = new OutputParser();
         $process->setTimeout($this->options['timeout']);
 
-        $process->run(function ($type, $buffer) use ($callback, $parser) {
-            if (Process::ERR === $type) {
-                return;
+        $process->run(
+            function ($type, $buffer) use ($callback, $parser) {
+                if (Process::ERR === $type) {
+                    return;
+                }
+
+                if ($callback) {
+                    $parser->getOutput()->add($buffer);
+                    $parser->recalculate();
+
+                    $event = new Event(
+                        $parser->getLastFile(),
+                        $parser->getOverallProgress(),
+                        null,
+                        $parser->getOutput()
+                    );
+
+                    call_user_func($callback, $event);
+                }
             }
-
-            if ($callback) {
-                $parser->getOutput()->add($buffer);
-                $parser->recalculate();
-
-                $event = new Event(
-                    $parser->getLastFile(),
-                    $parser->getOverallProgress(),
-                    null,
-                    $parser->getOutput()
-                );
-
-                call_user_func($callback, $event);
-            }
-
-        });
+        );
 
         if (! $process->isSuccessful()) {
             throw new ClientException($process->getErrorOutput());

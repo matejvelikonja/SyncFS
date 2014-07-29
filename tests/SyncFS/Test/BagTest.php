@@ -149,7 +149,7 @@ class BagTest extends \PHPUnit_Framework_TestCase
             array(
                 array(1, 2), false
             ),
-       );
+        );
     }
 
     /**
@@ -180,7 +180,7 @@ class BagTest extends \PHPUnit_Framework_TestCase
             array(
                 array(1, 2), 2,
             ),
-       );
+        );
     }
 
     /**

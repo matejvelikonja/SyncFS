@@ -126,5 +126,4 @@ class Event implements EventInterface
     {
         return $this->output;
     }
-
 }

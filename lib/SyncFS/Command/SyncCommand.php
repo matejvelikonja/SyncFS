@@ -78,14 +78,14 @@ class SyncCommand extends Command
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 
         $folderSyncer = new FolderSyncer($client);
-        $folderSyncer->sync($folders, function (EventInterface $event) use ($output) {
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
-                $output->writeln(sprintf('<comment>%s</comment>', $event->getOutput()->last()));
+        $folderSyncer->sync(
+            $folders,
+            function (EventInterface $event) use ($output) {
+                if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
+                    $output->writeln(sprintf('<comment>%s</comment>', $event->getOutput()->last()));
+                }
             }
-//            $output->writeln($event->getFile());
-//            $output->writeln($event->getOverallProgress());
-//            $output->writeln($event->getMap());
-        });
+        );
 
         $output->writeln(PHP_EOL . '<info>Syncing folders succeeded!</info>');
     }

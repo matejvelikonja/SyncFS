@@ -54,10 +54,12 @@ class ShowCommandTest extends TestCase
         $path    = $this->getConfigExampleFilePath();
         $content = file_get_contents($path);
 
-        $this->tester->execute(array(
-           'command'                     => $this->command->getName(),
-            InitCommand::ARG_CONFIG_PATH => $path,
-        ));
+        $this->tester->execute(
+            array(
+               'command'                     => $this->command->getName(),
+                InitCommand::ARG_CONFIG_PATH => $path,
+            )
+        );
 
         $display = $this->tester->getDisplay();
 
@@ -71,9 +73,11 @@ class ShowCommandTest extends TestCase
     {
         $configFilePath = '/this/should/be/non-readable.yml';
 
-        $this->tester->execute(array(
-            'command'                    => $this->command->getName(),
-            InitCommand::ARG_CONFIG_PATH => $configFilePath,
-        ));
+        $this->tester->execute(
+            array(
+                'command'                    => $this->command->getName(),
+                InitCommand::ARG_CONFIG_PATH => $configFilePath,
+            )
+        );
     }
 }
