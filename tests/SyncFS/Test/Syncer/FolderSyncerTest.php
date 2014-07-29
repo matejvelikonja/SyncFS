@@ -27,9 +27,11 @@ class FolderSyncerTest extends TestCase
 
         $syncer       = new FolderSyncer($client);
         $sourceFolder = new FileSystemMap('name', $client->getOrigin(), $client->getTarget());
-        $folders      = new MapBag(array(
-            $sourceFolder
-        ));
+        $folders      = new MapBag(
+            array(
+                $sourceFolder
+            )
+        );
 
         $syncer->sync($folders);
 

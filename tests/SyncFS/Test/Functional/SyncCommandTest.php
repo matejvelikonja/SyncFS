@@ -80,10 +80,12 @@ class SyncCommandTest extends TestCase
         $command = $application->find($syncCommand::COMMAND_NAME);
         $tester  = new CommandTester($command);
 
-        $tester->execute(array(
-           'command'                      => $command->getName(),
-            $syncCommand::ARG_CONFIG_PATH => $this->configPath,
-        ));
+        $tester->execute(
+            array(
+               'command'                      => $command->getName(),
+                $syncCommand::ARG_CONFIG_PATH => $this->configPath,
+            )
+        );
 
         foreach ($this->maps as $dir) {
             $this->assertTrue(
@@ -108,7 +110,10 @@ class SyncCommandTest extends TestCase
             return false;
         }
 
-        if ($this->countNumberOfFilesAndFolders($sourceFolder) !== $this->countNumberOfFilesAndFolders($destinationFolder)) {
+        $sourceCount      = $this->countNumberOfFilesAndFolders($sourceFolder);
+        $destinationCount = $this->countNumberOfFilesAndFolders($destinationFolder);
+
+        if ($sourceCount !== $destinationCount) {
             return false;
         }
 
@@ -170,10 +175,12 @@ class SyncCommandTest extends TestCase
     private function createTestDirs()
     {
         foreach ($this->maps as $dir) {
-            $this->fs->mkdir(array(
+            $this->fs->mkdir(
+                array(
                 $dir['src'],
                 $dir['dst'],
-            ));
+                )
+            );
 
             $this->fs->mirror(TEST_DIR . '/SyncFS', $dir['src']);
         }

@@ -77,5 +77,4 @@ class MockClient implements ClientInterface
     {
         return $this->target;
     }
-
 }
