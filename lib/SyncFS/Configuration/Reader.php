@@ -65,6 +65,11 @@ class Reader
 
         $content = file_get_contents($configPath);
         $data    = $this->parser->parse($content);
+
+        if (! is_array($data)) {
+            throw new ReaderException('Parsing error.');
+        }
+
         try {
             $config  = $this->processor->processConfiguration(
                 $this->configuration,

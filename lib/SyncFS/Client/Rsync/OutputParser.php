@@ -65,7 +65,7 @@ class OutputParser
         }
 
         if ($this->hasFinished()) {
-            $this->overallProgress = 1;
+            $this->overallProgress = (float) 1;
 
             return $this;
         }
