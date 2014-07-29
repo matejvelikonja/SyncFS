@@ -10,4 +10,5 @@ namespace SyncFS\Configuration;
  */
 class ReaderException extends \Exception
 {
+
 }

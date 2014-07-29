@@ -11,4 +11,4 @@ namespace SyncFS\Client;
 class ClientException extends \Exception
 {
 
-} 
+}

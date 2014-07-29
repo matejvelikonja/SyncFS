@@ -1,6 +1,7 @@
 <?php
 
 namespace SyncFS\Client\Rsync;
+
 use SyncFS\Client\Output;
 
 /**
@@ -191,5 +192,4 @@ class OutputParser
     {
         return $this->output;
     }
-
 }

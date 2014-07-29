@@ -3,6 +3,7 @@
 namespace SyncFS\Syncer;
 
 use SyncFS\Client\ClientInterface;
+use SyncFS\Map\FileSystemMap;
 use SyncFS\Map\MapBag;
 
 /**
@@ -32,6 +33,7 @@ class FolderSyncer
      */
     public function sync(MapBag $folders, $callback = null)
     {
+        /** @var FileSystemMap $folder */
         foreach ($folders->all() as $folder) {
             $this->client->sync($folder->getSource(), $folder->getDestination(), $callback);
         }
