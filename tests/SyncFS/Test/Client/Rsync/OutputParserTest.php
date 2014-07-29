@@ -14,8 +14,8 @@ use SyncFS\Client\Rsync\OutputParser;
 class OutputParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param array  $lines
-     * @param float  $expectedResult
+     * @param array $lines
+     * @param float $expectedResult
      *
      * @dataProvider getSimpleProgressBufferData
      */
@@ -166,4 +166,3 @@ class OutputParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
- 

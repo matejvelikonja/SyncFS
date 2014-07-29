@@ -22,4 +22,3 @@ class RsyncClientTest extends \PHPUnit_Framework_TestCase
         $client->sync('source', 'destination', 'certainly non callable');
     }
 }
- 

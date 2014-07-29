@@ -42,7 +42,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function getTmpDir()
     {
         // appends tmp after real path call, because it does not exists always
-
         return $this->getRealPath(TEST_DIR . '/../') . '/tmp';
     }
 
