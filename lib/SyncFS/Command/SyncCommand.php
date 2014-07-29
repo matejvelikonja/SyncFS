@@ -4,6 +4,7 @@ namespace SyncFS\Command;
 
 use SyncFS\Client\MockClient;
 use SyncFS\Client\RsyncClient;
+use SyncFS\Command\Helper\ProgressBar;
 use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
 use SyncFS\EventInterface;
@@ -53,6 +54,7 @@ class SyncCommand extends Command
     {
         $configPath = $input->getArgument('config-path');
         $dryRun     = $input->getOption('dry-run');
+        $progress   = new ProgressBar($output);
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -80,12 +82,26 @@ class SyncCommand extends Command
         $folderSyncer = new FolderSyncer($client);
         $folderSyncer->sync(
             $folders,
-            function (EventInterface $event) use ($output) {
+            function (EventInterface $event) use ($output, $progress) {
+                if (! $progress->isStarted() && $event->getFilesCount()) {
+                    $progress->setMax($event->getFilesCount());
+                    $progress->start();
+                }
+
+                if ($progress->isStarted()) {
+                    $progress->setCurrent($event->getCompletedFiles()->count());
+                }
+
                 if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
                     $output->writeln(sprintf('<comment>%s</comment>', $event->getOutput()->last()));
                 }
             }
         );
+
+        if ($progress->isStarted()) {
+            $progress->finish();
+            $output->writeln('');
+        }
 
         $output->writeln(PHP_EOL . '<info>Syncing folders succeeded!</info>');
     }

@@ -2,6 +2,7 @@
 
 namespace SyncFS\Client\Rsync;
 
+use SyncFS\Bag;
 use SyncFS\Client\Output;
 
 /**
@@ -26,9 +27,9 @@ class OutputParser
     private $overallProgress;
 
     /**
-     * @var array
+     * @var Bag
      */
-    private $files;
+    private $completedFiles;
 
     /**
      * @var \SyncFS\Client\Output
@@ -47,7 +48,7 @@ class OutputParser
         }
 
         $this->overallProgress = null;
-        $this->files           = array();
+        $this->completedFiles  = new Bag();
         $this->output          = $output;
 
         $this->recalculate();
@@ -78,7 +79,7 @@ class OutputParser
             $file = $this->determineFile();
 
             if ($file) {
-                $this->files[] = $file;
+                $this->completedFiles->add($file);
             }
         }
 
@@ -100,7 +101,9 @@ class OutputParser
      */
     public function getLastFile()
     {
-        return end($this->files);
+        $all = $this->completedFiles->all();
+
+        return end($all);
     }
 
     /**
@@ -171,6 +174,14 @@ class OutputParser
         }
 
         return $matches[2];
+    }
+
+    /**
+     * @return \SyncFS\Bag
+     */
+    public function getCompletedFiles()
+    {
+        return $this->completedFiles;
     }
 
     /**

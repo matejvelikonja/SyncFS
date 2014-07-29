@@ -99,6 +99,18 @@ class ProgressBar
     }
 
     /**
+     * @param int $step
+     *
+     * @return $this
+     */
+    public function setCurrent($step)
+    {
+        $this->bar->setCurrent($step);
+
+        return $this;
+    }
+
+    /**
      * @param OutputInterface $output
      * @param int             $max
      *

@@ -26,6 +26,25 @@ interface EventInterface
     public function getFile();
 
     /**
+     * Returns calculated number of files.
+     *
+     * @return int | null
+     */
+    public function getFilesCount();
+
+    /**
+     * @param Bag $bag
+     *
+     * @return $this
+     */
+    public function setCompletedFiles(Bag $bag);
+
+    /**
+     * @return Bag
+     */
+    public function getCompletedFiles();
+
+    /**
      * @param float $progress
      *
      * @return $this

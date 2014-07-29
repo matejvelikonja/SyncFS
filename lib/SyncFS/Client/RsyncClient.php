@@ -92,6 +92,8 @@ class RsyncClient implements ClientInterface
 
                     $event = new Event(
                         $parser->getLastFile(),
+                        $parser->getCompletedFiles(),
+                        $parser->getFilesCount(),
                         $parser->getOverallProgress(),
                         null,
                         $parser->getOutput()

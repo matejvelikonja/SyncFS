@@ -19,6 +19,16 @@ class Event implements EventInterface
     private $file;
 
     /**
+     * @var Bag
+     */
+    private $completedFiles;
+
+    /**
+     * @var int
+     */
+    private $filesCount;
+
+    /**
      * @var float
      */
     private $overallProgress;
@@ -35,13 +45,23 @@ class Event implements EventInterface
 
     /**
      * @param string        $file
+     * @param Bag           $completedFiles
+     * @param int           $filesCount
      * @param float         $overallProgress
      * @param MapInterface  $map
      * @param Client\Output $output
      */
-    public function __construct($file = null, $overallProgress = null, MapInterface $map = null, Output $output = null)
-    {
+    public function __construct(
+        $file = null,
+        Bag $completedFiles = null,
+        $filesCount = null,
+        $overallProgress = null,
+        MapInterface $map = null,
+        Output $output = null
+    ) {
         $this->file            = $file;
+        $this->completedFiles  = $completedFiles;
+        $this->filesCount      = $filesCount;
         $this->map             = $map;
         $this->overallProgress = $overallProgress;
         $this->output          = $output;
@@ -65,6 +85,26 @@ class Event implements EventInterface
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * @return \SyncFS\Bag
+     */
+    public function getCompletedFiles()
+    {
+        return $this->completedFiles;
+    }
+
+    /**
+     * @param \SyncFS\Bag $files
+     *
+     * @return $this
+     */
+    public function setCompletedFiles(Bag $files)
+    {
+        $this->completedFiles = $files;
+
+        return $this;
     }
 
     /**
@@ -125,5 +165,25 @@ class Event implements EventInterface
     public function getOutput()
     {
         return $this->output;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFilesCount()
+    {
+        return $this->filesCount;
+    }
+
+    /**
+     * @param int $filesCount
+     *
+     * @return $this
+     */
+    public function setFilesCount($filesCount)
+    {
+        $this->filesCount = $filesCount;
+
+        return $this;
     }
 }
