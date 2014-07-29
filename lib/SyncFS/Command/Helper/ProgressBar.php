@@ -9,6 +9,8 @@ use Symfony\Component\Console\Helper\ProgressBar as SFProgressBar;
 /**
  * Class ProgressBar
  *
+ * Wrapper for ProgressBar or ProgressHelper. Symfony 2.5 or above uses ProgressBar, older versions have ProgressHelper.
+ *
  * @package SyncFS\Command\Helper
  * @author  Matej Velikonja <matej@velikonja.si>
  */
@@ -37,7 +39,7 @@ class ProgressBar
         }
 
         if (! $bar) {
-            $bar = new SFProgressBar($output);
+            $bar = $this->getNewInstanceOfBar($output);
         }
 
         $this->bar    = $bar;
@@ -71,4 +73,39 @@ class ProgressBar
 
         return $this;
     }
-} 
+
+    /**
+     * @param int $step
+     *
+     * @return $this
+     */
+    public function advance($step = 1)
+    {
+        $this->bar->advance($step);
+
+        return $this;
+    }
+
+    /**
+     * @param int $max
+     *
+     * @return $this
+     */
+    public function setMax($max)
+    {
+        $this->bar = $this->getNewInstanceOfBar($this->output, $max);
+
+        return $this;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param int             $max
+     *
+     * @return SFProgressBar
+     */
+    private function getNewInstanceOfBar(OutputInterface $output, $max = 0)
+    {
+        return new SFProgressBar($output, $max);
+    }
+}
