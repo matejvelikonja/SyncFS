@@ -29,5 +29,5 @@ $ vendor/bin/phpunit
 
 Coding standards tests
 ```bash
-$ phpcs --standard=Symfony2 --ignore=/vendor --ignore=/log ./
+$ phpcs --standard=PSR2 --ignore=/vendor --ignore=/log ./
 ```
