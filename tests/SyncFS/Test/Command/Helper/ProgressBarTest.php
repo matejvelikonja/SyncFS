@@ -26,10 +26,17 @@ class ProgressBarTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ProgressBar|\PHPUnit_Framework_MockObject_MockObject $bar */
-        $bar    = $this->getMockBuilder('\Symfony\Component\Console\Helper\ProgressBar')
+        if (class_exists('\Symfony\Component\Console\Helper\ProgressBar')) {
+            $barBuilder = $this->getMockBuilder('\Symfony\Component\Console\Helper\ProgressBar');
+        } else {
+            $barBuilder = $this->getMockBuilder('\Symfony\Component\Console\Helper\ProgressHelper');
+        }
+
+        $bar = $barBuilder
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var ProgressBar|\PHPUnit_Framework_MockObject_MockObject $bar */
 
         $bar->expects($this->once())
             ->method('getStep')
