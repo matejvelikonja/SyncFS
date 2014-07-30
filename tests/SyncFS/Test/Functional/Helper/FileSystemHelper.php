@@ -40,11 +40,11 @@ class FileSystemHelper
 
         $this->fs->mkdir($dir);
 
-        foreach (range(0, 5) as $i) {
-            $size = rand(1, 5) * ($i + 1);
-            $this->createRandomFile($dir . "/{$i}_{$size}MB.txt", $size);
+        foreach (range(0, 150) as $i) {
+            $this->createRandomFile($dir . "/{$i}.txt");
         }
 
+        $this->createRandomBigFile($dir . "/biiiiiiiig_200MB.dat", 200);
     }
 
     /**
@@ -66,7 +66,7 @@ class FileSystemHelper
      *
      * @return int|null
      */
-    private function createRandomFile($path, $size)
+    private function createRandomBigFile($path, $size)
     {
         if (! is_int($size) || $size < 1) {
             throw new \InvalidArgumentException('Size argument is properly defined.');
@@ -87,5 +87,23 @@ class FileSystemHelper
         }
 
         return $process->getExitCode();
+    }
+
+    /**
+     * Create random small file.
+     *
+     * @param string $path
+     */
+    private function createRandomFile($path)
+    {
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n\t ";
+        $content    = '';
+        $length     = rand(1000, 20000);
+
+        for ($i = 0; $i < $length; $i++) {
+            $content .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        $this->fs->dumpFile($path, $content . PHP_EOL);
     }
 }

@@ -54,7 +54,11 @@ class SyncCommand extends Command
     {
         $configPath = $input->getArgument('config-path');
         $dryRun     = $input->getOption('dry-run');
-        $progress   = new ProgressBar($output);
+        $progress   = null;
+
+        if ($output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
+            $progress = new ProgressBar($output);
+        }
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -83,22 +87,22 @@ class SyncCommand extends Command
         $folderSyncer->sync(
             $folders,
             function (EventInterface $event) use ($output, $progress) {
-                if (! $progress->isStarted() && $event->getFilesCount()) {
-                    $progress->setMax($event->getFilesCount());
-                    $progress->start();
-                }
+                if ($progress) {
+                    if (! $progress->isStarted() && $event->getFilesCount()) {
+                        $progress->setMax($event->getFilesCount());
+                        $progress->start();
+                    }
 
-                if ($progress->isStarted()) {
-                    $progress->setCurrent($event->getCompletedFiles()->count());
-                }
-
-                if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
-                    $output->writeln(sprintf('<comment>%s</comment>', $event->getOutput()->last()));
+                    if ($progress->isStarted()) {
+                        $progress->setCurrent($event->getCompletedFiles()->count());
+                    }
+                } else {
+                    $output->writeln(sprintf('%s', $event->getOutput()->last()));
                 }
             }
         );
 
-        if ($progress->isStarted()) {
+        if ($progress && $progress->isStarted()) {
             $progress->finish();
             $output->writeln('');
         }
