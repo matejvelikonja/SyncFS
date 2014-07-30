@@ -48,9 +48,8 @@ class TestCommand extends Command
         $dstDir     = $testDir . '/sync-to-here';
         $fsHelper   = new FileSystemHelper($srcDir);
 
-
         $output->writeln(sprintf('<info>Creating temporary files in dir `%s`.</info>', $testDir));
-        $fsHelper->create();
+        $fsHelper->create($srcDir);
 
         $this->createConfig(
             $configPath,
@@ -81,7 +80,7 @@ class TestCommand extends Command
         );
 
         $output->writeln(sprintf('<info>Cleaning up...</info>'));
-        $fsHelper->cleanUp();
+        $fsHelper->cleanUp($testDir);
 
     }
 

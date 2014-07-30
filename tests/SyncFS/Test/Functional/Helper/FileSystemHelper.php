@@ -20,47 +20,41 @@ class FileSystemHelper
      */
     private $fs;
 
-    /**
-     * @var string
-     */
-    private $dir;
+    public function __construct()
+    {
+        $this->fs  = new Filesystem();
+    }
 
     /**
+     * Creates directory and some random files inside.
+     *
      * @param string $dir
      *
      * @throws \RuntimeException
      */
-    public function __construct($dir)
+    public function create($dir)
     {
-        $this->fs  = new Filesystem();
-        $this->dir = $dir;
-
-        if ($this->fs->exists($this->dir)) {
-            throw new \RuntimeException("Directory `{$this->dir}` should not exists.");
+        if ($this->fs->exists($dir)) {
+            throw new \RuntimeException("Directory `$dir` should not exists.");
         }
-    }
 
-
-    /**
-     * Creates directory and some random files inside.
-     */
-    public function create()
-    {
-        $this->fs->mkdir($this->dir);
+        $this->fs->mkdir($dir);
 
         foreach (range(0, 5) as $i) {
             $size = rand(1, 5) * ($i + 1);
-            $this->createRandomFile($this->dir . "/{$i}_{$size}MB.txt", $size);
+            $this->createRandomFile($dir . "/{$i}_{$size}MB.txt", $size);
         }
 
     }
 
     /**
      * Cleans up temporary created files and folders.
+     *
+     * @param string $dir
      */
-    public function cleanUp()
+    public function cleanUp($dir)
     {
-        $this->fs->remove($this->dir);
+        $this->fs->remove($dir);
     }
 
     /**
