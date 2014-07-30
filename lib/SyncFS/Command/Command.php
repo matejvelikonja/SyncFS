@@ -3,6 +3,9 @@
 namespace SyncFS\Command;
 
 use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Command
@@ -18,6 +21,16 @@ class Command extends BaseCommand
      * @var string
      */
     private $defaultConfigPath;
+
+    /**
+     * @var InputInterface
+     */
+    protected $input;
+
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
 
     /**
      * Constructor.
@@ -39,5 +52,30 @@ class Command extends BaseCommand
     protected function getDefaultConfiguration()
     {
         return $this->defaultConfigPath;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $args
+     *
+     * @return int
+     * @throws \LogicException
+     */
+    protected function runCommand($name, array $args)
+    {
+        if (! $this->output) {
+            throw new \LogicException('Output is needed for running other command. Sent it via class property.');
+        }
+
+        $defaults = array(
+            'command' => $name,
+        );
+
+        $mergedArgs = array_merge($defaults, $args);
+
+        $command = $this->getApplication()->find($name);
+        $input   = new ArrayInput($mergedArgs);
+
+        return $command->run($input, $this->output);
     }
 }
