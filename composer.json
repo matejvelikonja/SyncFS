@@ -1,6 +1,6 @@
 {
     "name": "velikonja/sync-fs",
-    "description": "PHP library/tool for syncing remote or local folders.",
+    "description": "PHP Library with command line tool for simple syncing folders via configuration file.",
     "type": "library",
     "license": "MIT",
     "authors": [
