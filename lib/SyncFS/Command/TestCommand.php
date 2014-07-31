@@ -3,7 +3,6 @@
 namespace SyncFS\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use SyncFS\Test\Functional\Helper\FileSystemHelper;
@@ -25,8 +24,7 @@ class TestCommand extends Command
     {
         $this
             ->setName(self::COMMAND_NAME)
-            ->setDescription('Execute simple test sync. It creates temporary test folders.')
-            ->addOption(SyncCommand::OPT_PROGRESS, 'p', InputOption::VALUE_NONE, 'Shows progress bar.');
+            ->setDescription('Execute simple test sync. It creates temporary test folders.');
     }
 
     /**
@@ -42,12 +40,11 @@ class TestCommand extends Command
         $this->input  = $input;
         $this->output = $output;
 
-        $progressEnabled = $input->getOption('progress');
-        $testDir         = sys_get_temp_dir() . '/' . uniqid('SyncFS_tests');
-        $configPath      = $testDir . '/config.yml';
-        $srcDir          = $testDir . '/sync-from-here';
-        $dstDir          = $testDir . '/sync-to-here';
-        $fsHelper        = new FileSystemHelper($srcDir);
+        $testDir    = sys_get_temp_dir() . '/' . uniqid('SyncFS_tests');
+        $configPath = $testDir . '/config.yml';
+        $srcDir     = $testDir . '/sync-from-here';
+        $dstDir     = $testDir . '/sync-to-here';
+        $fsHelper   = new FileSystemHelper($srcDir);
 
         $output->writeln(sprintf('<info>Creating temporary files in dir `%s`.</info>', $testDir));
         $fsHelper->create($srcDir);
@@ -76,8 +73,7 @@ class TestCommand extends Command
         $this->runCommand(
             SyncCommand::COMMAND_NAME,
             array(
-                self::ARG_CONFIG_PATH            => $configPath,
-                '--' . SyncCommand::OPT_PROGRESS => $progressEnabled
+                self::ARG_CONFIG_PATH => $configPath,
             )
         );
 

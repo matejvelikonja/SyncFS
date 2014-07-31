@@ -4,10 +4,8 @@ namespace SyncFS\Command;
 
 use SyncFS\Client\MockClient;
 use SyncFS\Client\RsyncClient;
-use SyncFS\Command\Helper\ProgressBar;
 use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
-use SyncFS\Event;
 use SyncFS\EventInterface;
 use SyncFS\Map\FileSystemMapFactory;
 use SyncFS\Syncer\FolderSyncer;
@@ -25,7 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncCommand extends Command
 {
     const COMMAND_NAME = 'sync';
-    const OPT_PROGRESS = 'progress';
 
     /**
      * Configure command.
@@ -41,8 +38,7 @@ class SyncCommand extends Command
                 'Path to config file.',
                 $this->getDefaultConfiguration()
             )
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.')
-            ->addOption(self::OPT_PROGRESS, 'p', InputOption::VALUE_NONE, 'Shows progress bar.');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
     }
 
     /**
@@ -57,12 +53,6 @@ class SyncCommand extends Command
     {
         $configPath      = $input->getArgument('config-path');
         $dryRun          = $input->getOption('dry-run');
-        $progressEnabled = $input->getOption(self::OPT_PROGRESS);
-        $progress        = null;
-
-        if ($progressEnabled) {
-            $progress = new ProgressBar($output);
-        }
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -87,39 +77,16 @@ class SyncCommand extends Command
 
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 
-        $lastEvent    = new Event('');
         $folderSyncer = new FolderSyncer($client);
         $folderSyncer->sync(
             $folders,
-            function (EventInterface $event) use ($output, $progress, &$lastEvent) {
-                if ($progress) {
-                    if (! $progress->isStarted() && $event->getFilesCount()) {
-                        $progress->setMax($event->getFilesCount());
-                        $progress->start();
-                    }
-
-                    if ($progress->isStarted()) {
-                        $progress->setCurrent($event->getCompletedFiles()->count());
-                        $progress->setMessage($event->getFile());
-                    }
-                } else {
-                    $output->write($event->getBuffer());
-                }
-
-                $lastEvent = $event;
+            function (EventInterface $event) use ($output) {
+                $output->write($event->getBuffer());
             }
         );
 
-        if ($progress && $progress->isStarted()) {
-            $progress->finish();
-            $output->writeln('');
-        }
-
         $output->writeln(
-            sprintf(
-                '<info>Syncing folders succeeded! Synced %d files.</info>',
-                $lastEvent->getCompletedFiles()->count()
-            )
+            '<info>Syncing folders succeeded!</info>'
         );
     }
 }

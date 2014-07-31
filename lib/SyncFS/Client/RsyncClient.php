@@ -3,7 +3,6 @@
 namespace SyncFS\Client;
 
 use Symfony\Component\Process\Process;
-use SyncFS\Client\Rsync\OutputParser;
 use SyncFS\Event;
 
 /**
@@ -77,26 +76,18 @@ class RsyncClient implements ClientInterface
         $options = $this->getOptionsString();
         $command = implode(' ', array($this->executable, $options, $src, $dst));
         $process = new Process($command);
-        $parser  = new OutputParser();
         $process->setTimeout($this->options['timeout']);
 
         $process->run(
-            function ($type, $buffer) use ($callback, $parser) {
+            function ($type, $buffer) use ($callback) {
                 if (Process::ERR === $type) {
                     return;
                 }
 
                 if ($callback) {
-                    $parser->getOutput()->add($buffer);
-                    $parser->recalculate();
-
                     $event = new Event(
                         $buffer,
-                        $parser->getLastFile(),
-                        $parser->getCompletedFiles(),
-                        $parser->getFilesCount(),
-                        null, //TODO
-                        $parser->getOutput()
+                        null //TODO
                     );
 
                     call_user_func($callback, $event);

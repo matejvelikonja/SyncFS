@@ -2,7 +2,6 @@
 
 namespace SyncFS;
 
-use SyncFS\Client\Output;
 use SyncFS\Map\MapInterface;
 
 /**
@@ -19,52 +18,18 @@ class Event implements EventInterface
     private $buffer;
 
     /**
-     * @var string
-     */
-    private $file;
-
-    /**
-     * @var Bag
-     */
-    private $completedFiles;
-
-    /**
-     * @var int
-     */
-    private $filesCount;
-
-    /**
      * @var MapInterface
      */
     private $map;
 
     /**
-     * @var Output
+     * @param string       $buffer
+     * @param MapInterface $map
      */
-    private $output;
-
-    /**
-     * @param string        $buffer
-     * @param string        $file
-     * @param Bag           $completedFiles
-     * @param int           $filesCount
-     * @param MapInterface  $map
-     * @param Client\Output $output
-     */
-    public function __construct(
-        $buffer,
-        $file = null,
-        Bag $completedFiles = null,
-        $filesCount = null,
-        MapInterface $map = null,
-        Output $output = null
-    ) {
-        $this->buffer          = $buffer;
-        $this->file            = $file;
-        $this->completedFiles  = $completedFiles;
-        $this->filesCount      = $filesCount;
-        $this->map             = $map;
-        $this->output          = $output;
+    public function __construct($buffer, MapInterface $map = null)
+    {
+        $this->buffer = $buffer;
+        $this->map    = $map;
     }
 
 
@@ -89,46 +54,6 @@ class Event implements EventInterface
     }
 
     /**
-     * @param string $file
-     *
-     * @return $this
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * @return \SyncFS\Bag
-     */
-    public function getCompletedFiles()
-    {
-        return $this->completedFiles;
-    }
-
-    /**
-     * @param \SyncFS\Bag $files
-     *
-     * @return $this
-     */
-    public function setCompletedFiles(Bag $files)
-    {
-        $this->completedFiles = $files;
-
-        return $this;
-    }
-
-    /**
      * @param \SyncFS\Map\MapInterface $map
      *
      * @return $this
@@ -146,45 +71,5 @@ class Event implements EventInterface
     public function getMap()
     {
         return $this->map;
-    }
-
-    /**
-     * @param \SyncFS\Client\Output $output
-     *
-     * @return $this
-     */
-    public function setOutput(Output $output)
-    {
-        $this->output = $output;
-
-        return $this;
-    }
-
-    /**
-     * @return \SyncFS\Client\Output
-     */
-    public function getOutput()
-    {
-        return $this->output;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFilesCount()
-    {
-        return $this->filesCount;
-    }
-
-    /**
-     * @param int $filesCount
-     *
-     * @return $this
-     */
-    public function setFilesCount($filesCount)
-    {
-        $this->filesCount = $filesCount;
-
-        return $this;
     }
 }
