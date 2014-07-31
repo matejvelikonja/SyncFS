@@ -69,7 +69,7 @@ class FileSystemHelper
     private function createRandomBigFile($path, $size)
     {
         if (! is_int($size) || $size < 1) {
-            throw new \InvalidArgumentException('Size argument is properly defined.');
+            throw new \InvalidArgumentException('Size argument is not properly defined.');
         }
 
         $process = new Process(

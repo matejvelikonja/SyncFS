@@ -13,16 +13,24 @@ use SyncFS\Bag;
 class Output extends Bag
 {
     /**
+     * Adds element to output. New lines are broken down to new elements.
+     *
      * @param string $element
      *
      * @return $this
      */
     public function add($element)
     {
-        // removes new lines
-        $element = trim(preg_replace('/\s+/', ' ', $element));
+        // removes trailing new line
+        $element = trim(preg_replace('/\s+$/', ' ', $element));
 
-        return parent::add($element);
+        $elements = explode(PHP_EOL, $element);
+
+        foreach ($elements as $e) {
+            return parent::add($e);
+        }
+
+        return $this;
     }
 
     /**
