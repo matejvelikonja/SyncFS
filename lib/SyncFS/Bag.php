@@ -159,6 +159,22 @@ class Bag implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
+     * @param mixed $needle
+     *
+     * @return bool
+     */
+    public function exists($needle)
+    {
+        foreach ($this->elements as $e) {
+            if ($e === $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function __toString()

@@ -269,4 +269,14 @@ class BagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, $bag->count());
     }
+
+    /**
+     * Basic test of exists method.
+     */
+    public function testExistsMethod()
+    {
+        $bag = new Bag(array(1, 2, 3, 4, 5));
+
+        $this->assertTrue($bag->exists(4));
+    }
 }
