@@ -31,12 +31,10 @@ before_script:
           symfony/filesystem:${SYMFONY_VERSION} \
           symfony/finder:${SYMFONY_VERSION}
 
-#    - composer install --dev
-    - pear install --alldeps PHP_CodeSniffer
     - phpenv rehash
 
 script:
-  - phpcs --standard=PSR2 --ignore=/vendor ./
+  - vendor/bin/phpcs --standard=PSR2 --ignore=/vendor ./
   - vendor/bin/phpunit --coverage-clover=coverage.clover -d zend.enable_gc=0
   - vendor/bin/box build
   - ./syncfs.phar
