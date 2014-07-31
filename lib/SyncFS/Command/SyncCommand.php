@@ -100,6 +100,7 @@ class SyncCommand extends Command
 
                     if ($progress->isStarted()) {
                         $progress->setCurrent($event->getCompletedFiles()->count());
+                        $progress->setMessage($event->getFile());
                     }
                 } else {
                     $output->write($event->getBuffer());

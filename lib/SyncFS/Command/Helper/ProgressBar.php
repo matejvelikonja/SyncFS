@@ -42,6 +42,8 @@ class ProgressBar
             $bar = $this->getNewInstanceOfBar($output);
         }
 
+        $bar->setFormatDefinition('normal', " %current%/%max% [%bar%] %percent:3s%%\n%message%");
+
         $this->bar    = $bar;
         $this->output = $output;
     }
@@ -109,6 +111,19 @@ class ProgressBar
 
         return $this;
     }
+
+    /**
+     * @param string $msg
+     *
+     * @return $this
+     */
+    public function setMessage($msg)
+    {
+        $this->bar->setMessage($msg);
+
+        return $this;
+    }
+
 
     /**
      * @param OutputInterface $output
