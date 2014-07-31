@@ -185,4 +185,12 @@ class SyncCommandTest extends TestCase
             $this->fs->mirror(TEST_DIR . '/SyncFS', $dir['src']);
         }
     }
+
+    /**
+     * @return string
+     */
+    protected function getCommandName()
+    {
+        return SyncCommand::COMMAND_NAME;
+    }
 }

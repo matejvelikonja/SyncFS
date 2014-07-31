@@ -29,10 +29,11 @@ class FileSystemHelper
      * Creates directory and some random files inside.
      *
      * @param string $dir
+     * @param bool   $bigFiles
      *
      * @throws \RuntimeException
      */
-    public function create($dir)
+    public function create($dir, $bigFiles)
     {
         if ($this->fs->exists($dir)) {
             throw new \RuntimeException("Directory `$dir` should not exists.");
@@ -47,7 +48,7 @@ class FileSystemHelper
         foreach ($folders as $folder) {
             $this->fs->mkdir($folder);
 
-            foreach (range(0, 150) as $i) {
+            foreach (range(0, 100) as $i) {
                 $name = sprintf(
                     '%03d-%s.txt',
                     $i,
@@ -58,7 +59,9 @@ class FileSystemHelper
             }
         }
 
-        $this->createRandomBigFile($dir . "/biiiiiiiig_200MB.dat", 200);
+        if ($bigFiles) {
+            $this->createRandomBigFile($dir . "/big-file_200MB.dat", 200);
+        }
     }
 
     /**

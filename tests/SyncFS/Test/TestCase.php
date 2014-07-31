@@ -23,6 +23,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return string
+     */
+    protected function getLibDir()
+    {
+        return $this->getRealPath(
+            TEST_DIR . '/../lib/SyncFS'
+        );
+    }
+
+    /**
      * Returns path to config.example.yml file.
      *
      * @return string

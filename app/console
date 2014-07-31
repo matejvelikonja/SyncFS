@@ -10,23 +10,10 @@ $libDir = __DIR__ . '/../lib/SyncFS';
 
 // import the Symfony Console Application
 use Symfony\Component\Console\Application;
-use Symfony\Component\Finder\Finder;
+use SyncFS\AutoLoader;
 
-$finder = new Finder();
-$finder
-    ->files()
-    ->in($libDir . '/Command')
-    ->name('/(\w+)Command.php/');
+$app        = new Application('SyncFS', '@package_version@');
+$autoLoader = new AutoLoader($libDir);
 
-$commands = array();
-/** @var SplFileInfo $file */
-foreach ($finder as $file) {
-    $className  = str_replace('.php', '', $file->getFilename());
-    $className  = '\\SyncFS\\Command\\' . $className;
-    $commands[] = new $className();
-}
-
-$app = new Application('SyncFS', '@package_version@');
-
-$app->addCommands($commands);
+$app->addCommands($autoLoader->getCommands());
 $app->run();

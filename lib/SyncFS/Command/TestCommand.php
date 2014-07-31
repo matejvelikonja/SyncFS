@@ -3,6 +3,7 @@
 namespace SyncFS\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use SyncFS\Test\Functional\Helper\FileSystemHelper;
@@ -24,7 +25,8 @@ class TestCommand extends Command
     {
         $this
             ->setName(self::COMMAND_NAME)
-            ->setDescription('Execute simple test sync. It creates temporary test folders.');
+            ->setDescription('Execute simple test sync. It creates temporary test folders.')
+            ->addOption('fast', 'f', InputOption::VALUE_NONE, 'Does not create big files. So it executes a bit faster');
     }
 
     /**
@@ -40,6 +42,7 @@ class TestCommand extends Command
         $this->input  = $input;
         $this->output = $output;
 
+        $fast       = $this->input->getOption('fast');
         $testDir    = sys_get_temp_dir() . '/' . uniqid('SyncFS_tests');
         $configPath = $testDir . '/config.yml';
         $srcDir     = $testDir . '/sync-from-here';
@@ -47,7 +50,7 @@ class TestCommand extends Command
         $fsHelper   = new FileSystemHelper($srcDir);
 
         $output->writeln(sprintf('<info>Creating temporary files in dir `%s`.</info>', $testDir));
-        $fsHelper->create($srcDir);
+        $fsHelper->create($srcDir, !$fast);
 
         $this->createConfig(
             $configPath,

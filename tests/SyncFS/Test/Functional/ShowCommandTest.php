@@ -2,10 +2,6 @@
 
 namespace SyncFS\Test\Functional;
 
-use SyncFS\Command\Command;
-use SyncFS\Command\InitCommand;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 use SyncFS\Command\ShowCommand;
 
 /**
@@ -16,36 +12,6 @@ use SyncFS\Command\ShowCommand;
  */
 class ShowCommandTest extends TestCase
 {
-
-    /**
-     * @var Command
-     */
-    private $command;
-
-    /**
-     * @var CommandTester
-     */
-    private $tester;
-
-    /**
-     * @var InitCommand
-     */
-    private $initCommand;
-
-    /**
-     * Called before every test.
-     */
-    public function setUp()
-    {
-        $application       = new Application();
-        $this->initCommand = new ShowCommand();
-
-        $application->add($this->initCommand);
-
-        $this->command = $application->find(ShowCommand::COMMAND_NAME);
-        $this->tester  = new CommandTester($this->command);
-    }
-
     /**
      * Tests basic sync command with config.example.yml file.
      */
@@ -56,8 +22,8 @@ class ShowCommandTest extends TestCase
 
         $this->tester->execute(
             array(
-               'command'                     => $this->command->getName(),
-                InitCommand::ARG_CONFIG_PATH => $path,
+               'command'                    => $this->command->getName(),
+               ShowCommand::ARG_CONFIG_PATH => $path,
             )
         );
 
@@ -76,8 +42,16 @@ class ShowCommandTest extends TestCase
         $this->tester->execute(
             array(
                 'command'                    => $this->command->getName(),
-                InitCommand::ARG_CONFIG_PATH => $configFilePath,
+                ShowCommand::ARG_CONFIG_PATH => $configFilePath,
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCommandName()
+    {
+        return ShowCommand::COMMAND_NAME;
     }
 }
