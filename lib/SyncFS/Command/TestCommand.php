@@ -26,7 +26,7 @@ class TestCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription('Execute simple test sync. It creates temporary test folders.')
-            ->addOption('no-clean-up', 'c', InputOption::VALUE_NONE, 'Do no clean up after finish.');
+            ->addOption(SyncCommand::OPT_PROGRESS, 'p', InputOption::VALUE_NONE, 'Shows progress bar.');
     }
 
     /**
@@ -42,11 +42,12 @@ class TestCommand extends Command
         $this->input  = $input;
         $this->output = $output;
 
-        $testDir    = sys_get_temp_dir() . '/' . uniqid('SyncFS_tests');
-        $configPath = $testDir . '/config.yml';
-        $srcDir     = $testDir . '/sync-from-here';
-        $dstDir     = $testDir . '/sync-to-here';
-        $fsHelper   = new FileSystemHelper($srcDir);
+        $progressEnabled = $input->getOption('progress');
+        $testDir         = sys_get_temp_dir() . '/' . uniqid('SyncFS_tests');
+        $configPath      = $testDir . '/config.yml';
+        $srcDir          = $testDir . '/sync-from-here';
+        $dstDir          = $testDir . '/sync-to-here';
+        $fsHelper        = new FileSystemHelper($srcDir);
 
         $output->writeln(sprintf('<info>Creating temporary files in dir `%s`.</info>', $testDir));
         $fsHelper->create($srcDir);
@@ -75,7 +76,8 @@ class TestCommand extends Command
         $this->runCommand(
             SyncCommand::COMMAND_NAME,
             array(
-                self::ARG_CONFIG_PATH => $configPath,
+                self::ARG_CONFIG_PATH            => $configPath,
+                '--' . SyncCommand::OPT_PROGRESS => $progressEnabled
             )
         );
 

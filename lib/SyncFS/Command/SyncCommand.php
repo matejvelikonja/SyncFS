@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncCommand extends Command
 {
     const COMMAND_NAME = 'sync';
+    const OPT_PROGRESS = 'progress';
 
     /**
      * Configure command.
@@ -39,7 +40,8 @@ class SyncCommand extends Command
                 'Path to config file.',
                 $this->getDefaultConfiguration()
             )
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.')
+            ->addOption(self::OPT_PROGRESS, 'p', InputOption::VALUE_NONE, 'Shows progress bar.');
     }
 
     /**
@@ -52,11 +54,12 @@ class SyncCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configPath = $input->getArgument('config-path');
-        $dryRun     = $input->getOption('dry-run');
-        $progress   = null;
+        $configPath      = $input->getArgument('config-path');
+        $dryRun          = $input->getOption('dry-run');
+        $progressEnabled = $input->getOption(self::OPT_PROGRESS);
+        $progress        = null;
 
-        if ($output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
+        if ($progressEnabled) {
             $progress = new ProgressBar($output);
         }
 
