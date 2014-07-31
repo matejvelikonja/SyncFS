@@ -38,11 +38,26 @@ class FileSystemHelper
             throw new \RuntimeException("Directory `$dir` should not exists.");
         }
 
-        $this->fs->mkdir($dir);
+        $folders = array(
+            $dir,
+            $dir . DIRECTORY_SEPARATOR . 'sub1',
+            $dir . DIRECTORY_SEPARATOR . 'sub-2',
+        );
 
-        foreach (range(0, 150) as $i) {
-            $this->createRandomFile($dir . "/{$i}.txt");
+        foreach ($folders as $folder) {
+            $this->fs->mkdir($folder);
+
+            foreach (range(0, 10) as $i) {
+                $name = sprintf(
+                    '%03d-%s.txt',
+                    $i,
+                    $this->getRandomString(rand(3, 10))
+                );
+
+                $this->createRandomFile($folder . DIRECTORY_SEPARATOR . $name);
+            }
         }
+
 
         $this->createRandomBigFile($dir . "/biiiiiiiig_200MB.dat", 200);
     }
@@ -96,14 +111,30 @@ class FileSystemHelper
      */
     private function createRandomFile($path)
     {
-        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n\t ";
+        $content = $this->getRandomString(rand(1000, 20000), true);
+
+        $this->fs->dumpFile($path, $content . PHP_EOL);
+    }
+
+    /**
+     * @param int  $length
+     * @param bool $allowWhitespaceChars
+     *
+     * @return string
+     */
+    private function getRandomString($length, $allowWhitespaceChars = false)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $content    = '';
-        $length     = rand(1000, 20000);
+
+        if ($allowWhitespaceChars) {
+            $characters .= "\n\t ";
+        }
 
         for ($i = 0; $i < $length; $i++) {
             $content .= $characters[rand(0, strlen($characters) - 1)];
         }
 
-        $this->fs->dumpFile($path, $content . PHP_EOL);
+        return $content;
     }
 }
