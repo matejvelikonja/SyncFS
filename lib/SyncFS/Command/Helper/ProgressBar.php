@@ -51,7 +51,7 @@ class ProgressBar
      */
     public function isStarted()
     {
-        return (bool) $this->bar->getStep();
+        return (bool) $this->bar->getStartTime();
     }
 
     /**
