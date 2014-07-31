@@ -60,8 +60,9 @@ class TestCommand extends Command
                         'random-folders-sync' => array(
                             'src' => $srcDir,
                             'dst' => $dstDir,
-                        )
-                    )
+                        ),
+                    ),
+                    'timeout' => 30,
                 )
             )
         );

@@ -1,4 +1,5 @@
 sync-fs:
+  timeout: 61
   maps:
     map_1:
       src: tmp/functional/src/

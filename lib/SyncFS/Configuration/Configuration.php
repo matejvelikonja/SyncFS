@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('timeout')->defaultValue(15*60)->end()
             ->end()
         ->end();
 

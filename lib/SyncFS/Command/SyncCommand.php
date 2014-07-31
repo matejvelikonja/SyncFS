@@ -51,8 +51,8 @@ class SyncCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configPath      = $input->getArgument('config-path');
-        $dryRun          = $input->getOption('dry-run');
+        $configPath = $input->getArgument('config-path');
+        $dryRun     = $input->getOption('dry-run');
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -72,7 +72,11 @@ class SyncCommand extends Command
 
         $client = new MockClient();
         if (! $dryRun) {
-            $client = new RsyncClient();
+            $client = new RsyncClient(
+                array(
+                    'timeout' => $config['timeout'],
+                )
+            );
         }
 
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
