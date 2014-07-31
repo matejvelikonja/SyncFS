@@ -91,11 +91,11 @@ class RsyncClient implements ClientInterface
                     $parser->recalculate();
 
                     $event = new Event(
+                        $buffer,
                         $parser->getLastFile(),
                         $parser->getCompletedFiles(),
                         $parser->getFilesCount(),
-                        $parser->getOverallProgress(),
-                        null,
+                        null, //TODO
                         $parser->getOutput()
                     );
 

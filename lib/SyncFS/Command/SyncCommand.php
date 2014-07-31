@@ -7,6 +7,7 @@ use SyncFS\Client\RsyncClient;
 use SyncFS\Command\Helper\ProgressBar;
 use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
+use SyncFS\Event;
 use SyncFS\EventInterface;
 use SyncFS\Map\FileSystemMapFactory;
 use SyncFS\Syncer\FolderSyncer;
@@ -86,10 +87,11 @@ class SyncCommand extends Command
 
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 
+        $lastEvent    = new Event('');
         $folderSyncer = new FolderSyncer($client);
         $folderSyncer->sync(
             $folders,
-            function (EventInterface $event) use ($output, $progress) {
+            function (EventInterface $event) use ($output, $progress, &$lastEvent) {
                 if ($progress) {
                     if (! $progress->isStarted() && $event->getFilesCount()) {
                         $progress->setMax($event->getFilesCount());
@@ -100,8 +102,10 @@ class SyncCommand extends Command
                         $progress->setCurrent($event->getCompletedFiles()->count());
                     }
                 } else {
-                    $output->writeln(sprintf('%s', $event->getOutput()->last()));
+                    $output->write($event->getBuffer());
                 }
+
+                $lastEvent = $event;
             }
         );
 
@@ -110,6 +114,11 @@ class SyncCommand extends Command
             $output->writeln('');
         }
 
-        $output->writeln(PHP_EOL . '<info>Syncing folders succeeded!</info>');
+        $output->writeln(
+            sprintf(
+                '<info>Syncing folders succeeded! Synced %d files.</info>',
+                $lastEvent->getCompletedFiles()->count()
+            )
+        );
     }
 }

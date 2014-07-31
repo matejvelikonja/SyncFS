@@ -16,6 +16,11 @@ class Event implements EventInterface
     /**
      * @var string
      */
+    private $buffer;
+
+    /**
+     * @var string
+     */
     private $file;
 
     /**
@@ -29,11 +34,6 @@ class Event implements EventInterface
     private $filesCount;
 
     /**
-     * @var float
-     */
-    private $overallProgress;
-
-    /**
      * @var MapInterface
      */
     private $map;
@@ -44,27 +44,48 @@ class Event implements EventInterface
     private $output;
 
     /**
+     * @param string        $buffer
      * @param string        $file
      * @param Bag           $completedFiles
      * @param int           $filesCount
-     * @param float         $overallProgress
      * @param MapInterface  $map
      * @param Client\Output $output
      */
     public function __construct(
+        $buffer,
         $file = null,
         Bag $completedFiles = null,
         $filesCount = null,
-        $overallProgress = null,
         MapInterface $map = null,
         Output $output = null
     ) {
+        $this->buffer          = $buffer;
         $this->file            = $file;
         $this->completedFiles  = $completedFiles;
         $this->filesCount      = $filesCount;
         $this->map             = $map;
-        $this->overallProgress = $overallProgress;
         $this->output          = $output;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getBuffer()
+    {
+        return $this->buffer;
+    }
+
+    /**
+     * @param string $buffer
+     *
+     * @return $this
+     */
+    public function setBuffer($buffer)
+    {
+        $this->buffer = $buffer;
+
+        return $this;
     }
 
     /**
@@ -125,26 +146,6 @@ class Event implements EventInterface
     public function getMap()
     {
         return $this->map;
-    }
-
-    /**
-     * @param float $overallProgress
-     *
-     * @return $this
-     */
-    public function setOverallProgress($overallProgress)
-    {
-        $this->overallProgress = $overallProgress;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getOverallProgress()
-    {
-        return $this->overallProgress;
     }
 
     /**

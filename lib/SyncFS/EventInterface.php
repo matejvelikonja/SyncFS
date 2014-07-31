@@ -14,6 +14,18 @@ use SyncFS\Map\MapInterface;
 interface EventInterface
 {
     /**
+     * @param string $buffer
+     *
+     * @return $this
+     */
+    public function setBuffer($buffer);
+
+    /**
+     * @return string
+     */
+    public function getBuffer();
+
+    /**
      * @param string $file
      *
      * @return $this
@@ -43,18 +55,6 @@ interface EventInterface
      * @return Bag
      */
     public function getCompletedFiles();
-
-    /**
-     * @param float $progress
-     *
-     * @return $this
-     */
-    public function setOverallProgress($progress);
-
-    /**
-     * @return float
-     */
-    public function getOverallProgress();
 
     /**
      * @param \SyncFS\Map\MapInterface $map

@@ -47,7 +47,7 @@ class FileSystemHelper
         foreach ($folders as $folder) {
             $this->fs->mkdir($folder);
 
-            foreach (range(0, 10) as $i) {
+            foreach (range(0, 150) as $i) {
                 $name = sprintf(
                     '%03d-%s.txt',
                     $i,
@@ -57,7 +57,6 @@ class FileSystemHelper
                 $this->createRandomFile($folder . DIRECTORY_SEPARATOR . $name);
             }
         }
-
 
         $this->createRandomBigFile($dir . "/biiiiiiiig_200MB.dat", 200);
     }

@@ -22,11 +22,6 @@ class OutputParser
     private $toCheckPattern = '/to-check=(\d+)\/(\d+)/';
 
     /**
-     * @var float | null
-     */
-    private $overallProgress;
-
-    /**
      * @var Bag
      */
     private $completedFiles;
@@ -47,7 +42,6 @@ class OutputParser
             $output = new Output();
         }
 
-        $this->overallProgress = null;
         $this->completedFiles  = new Bag();
         $this->output          = $output;
 
@@ -65,35 +59,15 @@ class OutputParser
             return $this;
         }
 
-        if ($this->hasFinished()) {
-            $this->overallProgress = (float) 1;
+        $files = $this->determineFiles();
 
-            return $this;
-        }
-
-        $progress = $this->determineOverallProgress();
-
-        if ($progress) {
-            $this->overallProgress = $progress;
-        } else {
-            $file = $this->determineFile();
-
-            if ($file) {
+        foreach ($files as $file) {
+            if (! $this->completedFiles->exists($file)) {
                 $this->completedFiles->add($file);
             }
         }
 
         return $this;
-    }
-
-    /**
-     * Returns overall progress. If returns null, syncing has not started yet.
-     *
-     * @return float | null
-     */
-    public function getOverallProgress()
-    {
-        return $this->overallProgress;
     }
 
     /**
@@ -107,59 +81,21 @@ class OutputParser
     }
 
     /**
-     * Returns progress read from rsync output.
-     * If parser cannot read progress it returns null.
-     *
-     * @return float | null
-     */
-    private function determineOverallProgress()
-    {
-        preg_match($this->toCheckPattern, $this->output->last(), $matches);
-
-        if (count($matches) < 3) {
-            return null;
-        }
-
-        $remaining = $matches[1];
-        $all       = $matches[2];
-        $completed = $all - $remaining;
-
-        $result = round($completed / $all, 2);
-
-        return $result;
-    }
-
-    /**
-     * Tries to determine if rsync has finished.
-     *
-     * @return bool
-     */
-    private function hasFinished()
-    {
-        if (preg_match('/sent (.+) bytes received/', $this->output->last())) {
-            return true;
-        }
-
-        if (preg_match('/total size is (.+) speedup is/', $this->output->last())) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Tries to determine file that is syncing.
      * This is a very basic implementation. It does not know about files in current directory (without any /).
      *
-     * @return string | null
+     * @return array
      */
-    private function determineFile()
+    private function determineFiles()
     {
-        if (strpos($this->output->last(), '/')) {
-            return $this->output->last();
+        //TODO: change regexp prefix
+        preg_match_all('/sync-from-here\/(.*)/', $this->output->__toString(), $matches);
+
+        if (isset($matches[0])) {
+            return $matches[0];
         }
 
-        return null;
+        return array();
     }
 
     /**
