@@ -37,8 +37,6 @@
         }
     },
 
-    "target-dir": "Velikonja/SyncFS",
-
     "bin": [
         "app/syncfs"
     ]
