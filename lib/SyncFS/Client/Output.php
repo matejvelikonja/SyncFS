@@ -15,19 +15,19 @@ class Output extends Bag
     /**
      * Adds element to output. New lines are broken down to new elements.
      *
-     * @param string $element
+     * @param string $buffer
      *
      * @return $this
      */
-    public function add($element)
+    public function add($buffer)
     {
-        // removes trailing new line
-        $element = trim(preg_replace('/\s+$/', ' ', $element));
+        $newLineRegex = "/\r\n|\n|\r/";
+        $elements     = preg_split($newLineRegex, $buffer);
 
-        $elements = explode(PHP_EOL, $element);
-
-        foreach ($elements as $e) {
-            return parent::add($e);
+        foreach ($elements as $element) {
+            if (strlen($element)) {
+                parent::add($element);
+            }
         }
 
         return $this;
