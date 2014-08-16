@@ -2,6 +2,7 @@
 
 namespace SyncFS\Configuration;
 
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -23,7 +24,19 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('filesystem');
 
-        $rootNode
+        $this->getConfigNode($rootNode);
+
+        return $treeBuilder;
+    }
+
+    /**
+     * @param NodeDefinition $node
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    public function getConfigNode(NodeDefinition $node)
+    {
+        $node
             ->children()
                 ->arrayNode('maps')
                     ->isRequired()
@@ -36,10 +49,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->scalarNode('timeout')->defaultValue(15*60)->end()
+                ->scalarNode('timeout')->defaultValue(15 * 60)->end()
             ->end()
         ->end();
 
-        return $treeBuilder;
+        return $node;
     }
 }
