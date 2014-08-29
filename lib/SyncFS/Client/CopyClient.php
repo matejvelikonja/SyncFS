@@ -1,6 +1,7 @@
 <?php
 
 namespace SyncFS\Client;
+
 use Symfony\Component\Filesystem\Filesystem;
 use SyncFS\Event;
 
