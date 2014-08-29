@@ -62,7 +62,8 @@ class TestCommand extends Command
                             'dst' => $dstDir,
                         ),
                     ),
-                    'timeout' => 30,
+                    'timeout'        => 30,
+                    'default_client' => 'rsync'
                 )
             )
         );

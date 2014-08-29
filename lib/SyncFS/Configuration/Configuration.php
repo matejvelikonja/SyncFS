@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
+                ->scalarNode('default_client')->defaultValue('rsync')->end()
                 ->arrayNode('maps')
                     ->isRequired()
                     ->requiresAtLeastOneElement()
@@ -46,6 +47,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('src')->isRequired()->end()
                             ->scalarNode('dst')->isRequired()->end()
+                            ->scalarNode('client')->defaultNull()->end()
                         ->end()
                     ->end()
                 ->end()

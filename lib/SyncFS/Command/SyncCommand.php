@@ -2,13 +2,10 @@
 
 namespace SyncFS\Command;
 
-use SyncFS\Client\MockClient;
-use SyncFS\Client\RsyncClient;
 use SyncFS\Configuration\Configuration;
 use SyncFS\Configuration\Reader;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use SyncFS\Syncer;
 
@@ -35,8 +32,7 @@ class SyncCommand extends Command
                 InputArgument::OPTIONAL,
                 'Path to config file.',
                 $this->getDefaultConfiguration()
-            )
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Uses mock classes for syncing.');
+            );
     }
 
     /**
@@ -50,7 +46,6 @@ class SyncCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configPath = $input->getArgument('config-path');
-        $dryRun     = $input->getOption('dry-run');
 
         if (! file_exists($configPath)) {
             throw new \Exception(sprintf('Configuration file %s does not exists.', $configPath));
@@ -65,15 +60,7 @@ class SyncCommand extends Command
 
         $output->writeln(sprintf('<info>Configuration read.</info>'));
 
-        $client = new MockClient();
-        if (! $dryRun) {
-            $client = new RsyncClient(
-                array(
-                    'timeout' => $config['timeout'],
-                )
-            );
-        }
-        $syncer = new Syncer($config['maps'], $client);
+        $syncer = new Syncer($config);
 
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 

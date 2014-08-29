@@ -3,6 +3,7 @@
 namespace SyncFS;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use SyncFS\Client\Factory;
 use SyncFS\Client\ClientInterface;
 use SyncFS\Map\FileSystemMapFactory;
 use SyncFS\Map\MapBag;
@@ -24,17 +25,21 @@ class Syncer
     /**
      * @var ClientInterface
      */
-    private $client;
+    private $defaultClient;
 
     /**
-     * @param array           $config
-     * @param ClientInterface $client
+     * @param array   $config
+     * @param Factory $clientFactory
      */
-    public function __construct(array $config, ClientInterface $client)
+    public function __construct(array $config, Factory $clientFactory = null)
     {
-        $mapFactory   = new FileSystemMapFactory();
-        $this->map    = $mapFactory->create($config);
-        $this->client = $client;
+        if (! $clientFactory) {
+            $clientFactory = new Factory();
+        }
+
+        $mapFactory          = new FileSystemMapFactory();
+        $this->map           = $mapFactory->create($config['maps']);
+        $this->defaultClient = $clientFactory->create($config['default_client']);
     }
 
     /**
@@ -42,7 +47,7 @@ class Syncer
      */
     public function sync(OutputInterface $output)
     {
-        $folderSyncer = new FolderSyncer($this->client);
+        $folderSyncer = new FolderSyncer($this->defaultClient);
         $folderSyncer->sync(
             $this->map,
             function (EventInterface $event) use ($output) {
