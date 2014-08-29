@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use SyncFS\Syncer;
 
 /**
  * Class SyncCommand
@@ -67,9 +68,6 @@ class SyncCommand extends Command
 
         $output->writeln(sprintf('<info>Configuration read.</info>'));
 
-        $factory = new FileSystemMapFactory();
-        $folders = $factory->create($config['maps']);
-
         $client = new MockClient();
         if (! $dryRun) {
             $client = new RsyncClient(
@@ -78,16 +76,11 @@ class SyncCommand extends Command
                 )
             );
         }
+        $syncer = new Syncer($config['maps'], $client);
 
         $output->writeln('<info>Syncing folders...</info>' . PHP_EOL);
 
-        $folderSyncer = new FolderSyncer($client);
-        $folderSyncer->sync(
-            $folders,
-            function (EventInterface $event) use ($output) {
-                $output->write($event->getBuffer());
-            }
-        );
+        $syncer->sync($output);
 
         $output->writeln(
             '<info>Syncing folders succeeded!</info>'
