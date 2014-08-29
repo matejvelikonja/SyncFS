@@ -26,6 +26,7 @@ class Factory
                 $client = new RsyncClient();
                 break;
             case 'mock':
+            case 'test':
                 $client = new MockClient();
                 break;
             case 'copy':

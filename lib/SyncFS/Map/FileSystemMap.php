@@ -25,6 +25,11 @@ class FileSystemMap implements MapInterface
     private $destination;
 
     /**
+     * @var string
+     */
+    private $client;
+
+    /**
      * @param string $name
      * @param string $source
      * @param string $destination
@@ -94,5 +99,25 @@ class FileSystemMap implements MapInterface
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param string $client
+     *
+     * @return $this
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+
+        return $this;
     }
 }

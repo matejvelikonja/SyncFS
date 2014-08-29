@@ -30,8 +30,9 @@ class FileSystemMapFactoryTest extends TestCase
                 'dst'  => 'destination_1',
             ),
             'folder_name_2' => array(
-                'src'  => 'source_2',
-                'dst'  => 'destination_2',
+                'src'    => 'source_2',
+                'dst'    => 'destination_2',
+                'client' => 'test'
             )
         );
     }
@@ -84,6 +85,11 @@ class FileSystemMapFactoryTest extends TestCase
 
             $this->assertEquals($this->data[$name]['src'], $map->getSource());
             $this->assertEquals($this->data[$name]['dst'], $map->getDestination());
+
+            if (isset($this->data['client'])) {
+                $this->assertEquals($this->data['client'], $map->getClient());
+            }
+
             $this->assertEquals($name, $map->getName());
 
             $count++;
