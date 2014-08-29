@@ -28,6 +28,9 @@ class Factory
             case 'mock':
                 $client = new MockClient();
                 break;
+            case 'copy':
+                $client = new CopyClient();
+                break;
         }
 
         if (! $client) {

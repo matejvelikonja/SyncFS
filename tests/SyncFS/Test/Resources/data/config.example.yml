@@ -8,3 +8,4 @@ sync-fs:
     map_2:
       src:    tmp/functional/src2/
       dst:    tmp/functional/dst2/
+      client: copy
