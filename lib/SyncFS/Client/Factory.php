@@ -11,19 +11,20 @@ namespace SyncFS\Client;
 class Factory
 {
     /**
-     * @param $name
+     * @param string $name
+     * @param array  $options
      *
      * @throws \InvalidArgumentException
      *
      * @return ClientInterface
      */
-    public function create($name)
+    public function create($name, array $options = array())
     {
         $client = null;
 
         switch($name) {
             case 'rsync':
-                $client = new RsyncClient();
+                $client = new RsyncClient($options);
                 break;
             case 'mock':
             case 'test':

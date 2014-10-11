@@ -37,9 +37,13 @@ class Syncer
             $clientFactory = new Factory();
         }
 
+        $clientConfig = array(
+            'timeout' => $config['timeout']
+        );
+
         $mapFactory          = new FileSystemMapFactory();
         $this->map           = $mapFactory->create($config['maps']);
-        $this->defaultClient = $clientFactory->create($config['default_client']);
+        $this->defaultClient = $clientFactory->create($config['default_client'], $clientConfig);
     }
 
     /**
