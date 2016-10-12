@@ -60,6 +60,5 @@ class Syncer
                 $output->write($event->getBuffer());
             }
         );
-
     }
 }
