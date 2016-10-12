@@ -20,7 +20,7 @@ class ConfigurationTest extends TestCase
      */
     public function testReadingExampleConfiguration()
     {
-        $config        = Yaml::parse($this->getConfigExampleFilePath());
+        $config        = Yaml::parse(file_get_contents($this->getConfigExampleFilePath()));
         $processor     = new Processor();
         $configuration = new Configuration();
 

@@ -1,17 +1,13 @@
 language: php
 
 php:
-  - 5.3.3
-  - 5.3
-  - 5.4
-  - 5.5
   - 5.6
+  - 7.0
   - hhvm
 
 env:
-    - SYMFONY_VERSION="2.3.*"
-    - SYMFONY_VERSION="2.4.*"
-    - SYMFONY_VERSION="2.5.*"
+    - SYMFONY_VERSION="^3.1"
+    - SYMFONY_VERSION="^2.7"
     - SYMFONY_VERSION="dev-master"
 
 matrix:
@@ -36,8 +32,6 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --ignore=/vendor ./
   - vendor/bin/phpunit --coverage-clover=coverage.clover -d zend.enable_gc=0
-  - vendor/bin/box build
-  - ./syncfs.phar
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

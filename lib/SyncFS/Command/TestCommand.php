@@ -50,7 +50,7 @@ class TestCommand extends Command
         $fsHelper   = new FileSystemHelper($srcDir);
 
         $output->writeln(sprintf('<info>Creating temporary files in dir `%s`.</info>', $testDir));
-        $fsHelper->create($srcDir, !$fast);
+        $fsHelper->create($srcDir, ! $fast);
 
         $this->createConfig(
             $configPath,
@@ -84,7 +84,6 @@ class TestCommand extends Command
 
         $output->writeln(sprintf('<info>Cleaning up...</info>'));
         $fsHelper->cleanUp($testDir);
-
     }
 
     /**

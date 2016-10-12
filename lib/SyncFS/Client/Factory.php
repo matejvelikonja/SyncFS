@@ -22,7 +22,7 @@ class Factory
     {
         $client = null;
 
-        switch($name) {
+        switch ($name) {
             case 'rsync':
                 $client = new RsyncClient($options);
                 break;
