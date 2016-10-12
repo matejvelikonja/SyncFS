@@ -7,7 +7,7 @@
 
 PHP Library with command line tool for simple syncing folders via configuration file.
 
-SyncFS is PHP5 library build on Symfony2 components. Via simple configuration file written in YAML, you can define
+SyncFS is PHP5 library build on Symfony components. Via simple configuration file written in YAML, you can define
 folders that you would like to sync, locally or remotely.
 
 **Usage examples**
@@ -27,7 +27,7 @@ folders that you would like to sync, locally or remotely.
 ### Via as composer
 
 ```bash
-$ composer global require "velikonja/sync-fs=dev-master"
+$ composer global require "velikonja/sync-fs"
 ```
 
 #### Usage
@@ -38,17 +38,11 @@ $ ~/.composer/vendor/bin/syncfs
 
 Add folder `~/.composer/vendor/bin/` to `$PATH` variable for global usage.
 
-### Phar
-
-*TODO*
-
 ## Install as library
 
 ```bash
-$ composer require "velikonja/sync-fs=dev-master"
+$ composer require "velikonja/sync-fs"
 ```
-
-*TODO*: improve
 
 ## Setup and usage of tool
 
@@ -63,12 +57,6 @@ Install dependencies
 ```bash
 $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install --dev
-```
-
-## Building PHAR file
-
-```bash
-$ vendor/bin/box build
 ```
 
 ### Tests
